@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neighborhood Map</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="/css/lib/foundation.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header>
+      <div class="top-bar">
+        <div class="top-bar-left">
+	  <a class="big-title" href="{{url_for('catPicker')}}">
+            Cat Clicker Premium Pro
+          </a>
+        </div>
+      </div>
+      <br>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+      <div class="row">
+        <div class="medium-6 columns">
+          <ul class="menu float-light">
+            <li class="menu-text">
+              <i class="fa fa-copyright" aria-hidden="true">
+                2017 Yoko Harada
+              </i>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <script src="/js/lib/jquery.min.js"></script>
+    <script src="/js/lib/foundation.js"></script>
+    <script src="/js/lib/knockout-3.4.1.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+  </body>
+</html>
