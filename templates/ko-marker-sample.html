@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<script src="{{url}}"></script>
+<main>
+  <div class="row">
+    <div class="small-12 columns">
+      <h3>My Google Maps Demo</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <div id="map" data-bind="map: myMap"></div>
+    </div>
+  </div>
+</main>
+{% endblock %}

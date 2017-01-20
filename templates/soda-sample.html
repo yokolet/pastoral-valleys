@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+  <div class="row">
+    <div class="small-12 columns">
+      <h3>My Google Maps Demo</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <div id="map"></div>
+    </div>
+  </div>
+</main>
+<script>
+  function initSodaMap() {
+    var center = {lat: 41.7656874, lng: -72.680087};
+    var mapOptions = {
+      zoom: 10,
+      center: center
+    }
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    // Construct the query string
+    url = 'https://data.ct.gov/resource/v4tt-nt9n.json?'
+      + 'organization_type=Public%20School%20Districts';
+    $.getJSON(url, function(data, textstatus) {
+  $.each(data, function(i, entry) {
+  if (entry.location_1) {
+  var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(entry.location_1.coordinates[1], 
+                                                 entry.location_1.coordinates[0]),
+                map: map,
+                title: location.name
+  });
+  }
+      });
+    });
+  }
+</script>
+<script async defer src="{{url}}"></script>
+{% endblock %}
