@@ -12,10 +12,6 @@ MAP_CONFIG = json.loads(
 def hello():
     return 'Hello World!';
 
-@app.route('/cat-clicker')
-def catClicker():
-    return render_template('cat-clicker.html')
-
 @app.route('/marker-sample')
 def markedMap():
     callback = 'initMap'
