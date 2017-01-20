@@ -14,23 +14,29 @@
 </main>
 <script>
   function initSodaMap() {
-    var center = {lat: 41.7656874, lng: -72.680087};
+  // Hartford, CT
+  // var center = {lat: 41.7656874, lng: -72.680087};
+  // Raleigh, NC
+  // var center = {lat: 35.7796, lng: -78.6382};
+  var center = {lat: 35.8572, lng: -78.7147};
+
     var mapOptions = {
-      zoom: 10,
+      zoom: 15,
       center: center
     }
     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
     // Construct the query string
-    url = 'https://data.ct.gov/resource/v4tt-nt9n.json?'
-      + 'organization_type=Public%20School%20Districts';
+    //url = 'https://data.ct.gov/resource/v4tt-nt9n.json?'
+  //  + 'organization_type=Public%20School%20Districts';
+    url = 'https://data.raleighnc.gov/resource/emea-ai2t.json?'
     $.getJSON(url, function(data, textstatus) {
   $.each(data, function(i, entry) {
-  if (entry.location_1) {
+  if (entry.location) {
   var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(entry.location_1.coordinates[1], 
-                                                 entry.location_1.coordinates[0]),
+                position: new google.maps.LatLng(entry.location.coordinates[1],
+                                                 entry.location.coordinates[0]),
                 map: map,
-                title: location.name
+                title: entry.lcr_desc
   });
   }
       });
