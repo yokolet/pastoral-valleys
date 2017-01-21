@@ -28,19 +28,21 @@
     // Construct the query string
     //url = 'https://data.ct.gov/resource/v4tt-nt9n.json?'
   //  + 'organization_type=Public%20School%20Districts';
-    url = 'https://data.raleighnc.gov/resource/emea-ai2t.json?'
-    $.getJSON(url, function(data, textstatus) {
+  //url = 'https://data.raleighnc.gov/resource/emea-ai2t.json'
+  url = '/api/JSON';
+  $.getJSON(url, function(data, textstatus) {
   $.each(data, function(i, entry) {
-  if (entry.location) {
+  console.log(entry);
+  if (entry.position) {
   var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(entry.location.coordinates[1],
-                                                 entry.location.coordinates[0]),
+                position: new google.maps.LatLng(entry.position.lat,
+                                                 entry.position.lng),
                 map: map,
-                title: entry.lcr_desc
+  title: entry.title,
   });
-  }
-      });
-    });
+   }
+   });
+   });
   }
 </script>
 <script async defer src="{{url}}"></script>
