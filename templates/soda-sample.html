@@ -29,7 +29,7 @@
     //url = 'https://data.ct.gov/resource/v4tt-nt9n.json?'
   //  + 'organization_type=Public%20School%20Districts';
   //url = 'https://data.raleighnc.gov/resource/emea-ai2t.json'
-  url = '/api/JSON';
+  url = '/api/JSON?lat=35.8572&lng=-78.7147';
   $.getJSON(url, function(data, textstatus) {
   $.each(data, function(i, entry) {
   console.log(entry);

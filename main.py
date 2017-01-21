@@ -48,8 +48,16 @@ def extract(j_data):
 
 @app.route('/api/JSON')
 def getJSON():
+    lat = request.args.get('lat')
+    lng = request.args.get('lng')
     url = APP_CONFIG['opendata']['url']
-    url = url + '$$app_token=' + APP_CONFIG['opendata']['app_token']
+    url = url + '$limit=' + str(APP_CONFIG['opendata']['limit'])
+    url = url + '&$$app_token=' + APP_CONFIG['opendata']['app_token']
+    # within_circle(field, lat, lng, radius)
+    where_query = '&$where=within_circle(location, %s, %s, %s)' % (
+        lat, lng, APP_CONFIG['opendata']['radius'])
+    print(where_query)
+    url += where_query
     response = rq.get(url)
     if response.status_code == 200:
         j_data = response.json()
@@ -60,6 +68,7 @@ def getJSON():
 @app.route('/')
 def hello():
     return 'Hello World!';
+
 
 @app.route('/marker-sample')
 def markedMap():
