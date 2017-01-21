@@ -56,6 +56,34 @@ ko.bindingHandlers.map = {
             var latLng = mapObj.marker.getPosition();
             mapObj.lat(latLng.lat());
             mapObj.lng(latLng.lng());
+            url = "/api/JSON?lat=" +
+                latLng.lat() +
+                "&lng=" +
+                latLng.lng();
+            // TODO: center is draggable
+            // but, other marker is not
+            // when center is dragged, it should call api
+            $.getJSON(url, function(data) {
+                console.log("data should be here")
+                $.each(data, function(i, entry) {
+                    if (entry.position) {
+                        var marker = new google.maps.Marker({
+                            map: mapObj.googleMap,
+                            position: new google.maps.LatLng(entry.position.lat,
+                                                             entry.position.lng),
+                            title: entry.title,
+                            icon: entry.icon,
+                        });
+                        var infoObj = new google.maps.InfoWindow({
+                            content: entry.content
+                        });
+                        marker.addListener('click', function() {
+                            infoObj.open(mapObj.googleMap, marker);
+                        });
+                        google.maps.event.addListener(marker, 'dragend', mapObj.onMarkerMoved);
+                    }
+                });
+            });
         };
 
         mapObj.lat.subscribe(mapObj.onChangedCoord);

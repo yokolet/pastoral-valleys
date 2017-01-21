@@ -24,11 +24,36 @@ KEEP_LIST = [
     'weapons'
     ]
 
-def islisted(word):
+CATEGORIES = {
+    'arson': 'fire',
+    'assault': 'action',
+    'burglary': 'theft',
+    'firearm': 'gun',
+    'homicide': 'murder',
+    'larceny': 'theft',
+    'murder': 'murder',
+    'rape': 'sex',
+    'robbery': 'theft',
+    'sex': 'sex',
+    'shots': 'gun',
+    'theft': 'theft',
+    'weapons': 'gun',
+    }
+
+IMAGES = {
+    'fire': 'fire.png',
+    'action': 'action.png',
+    'theft': 'thief.png',
+    'gun': 'gun.png',
+    'murder': 'skull.png',
+    'sex': 'crying.png',
+    }
+
+def category(words):
     for listed in KEEP_LIST:
-        if listed in word:
-            return True
-    return False
+        if listed in words:
+            return CATEGORIES[listed]
+    return None
 
 def extract(j_data):
     records = []
@@ -36,13 +61,16 @@ def extract(j_data):
         tmp = {}
         desc = record['lcr_desc'].lower().split('/')
         title = desc[0]
-        if islisted(title) and 'location' in record:
+        cat = category(title)
+        if cat and 'location' in record:
             tmp['position'] = {'lat': record['location']['coordinates'][1],
                                'lng': record['location']['coordinates'][0]}
             tmp['title'] = title.capitalize()
-            tmp['content'] = record['lcr_desc'].capitalize()
-            tmp['content'] += str(record['inc_datetime']).capitalize()
-            tmp['icon'] = '/image/thief.png'
+            tmp['content'] = '%s<br/>%s' % (
+                record['lcr_desc'].capitalize(),
+                str(record['inc_datetime']).capitalize())
+            tmp['category'] = cat
+            tmp['icon'] = '/image/' + IMAGES[cat]
             records.append(tmp)
     return records
 
