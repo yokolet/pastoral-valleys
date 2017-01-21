@@ -40,8 +40,9 @@ def extract(j_data):
             tmp['position'] = {'lat': record['location']['coordinates'][1],
                                'lng': record['location']['coordinates'][0]}
             tmp['title'] = title.capitalize()
-            tmp['content'] = desc[1] if len(desc) > 1 else ''
-            # tmp['image'] = ''
+            tmp['content'] = record['lcr_desc'].capitalize()
+            tmp['content'] += str(record['inc_datetime']).capitalize()
+            tmp['icon'] = '/image/thief.png'
             records.append(tmp)
     return records
 
