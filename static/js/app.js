@@ -1,6 +1,8 @@
 ko.bindingHandlers.map = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        console.log('init function');
         var mapObj = ko.utils.unwrapObservable(valueAccessor());
+        console.log(mapObj);
         var latLng = new google.maps.LatLng(
             ko.utils.unwrapObservable(mapObj.lat),
             ko.utils.unwrapObservable(mapObj.lng));
@@ -39,6 +41,13 @@ ko.bindingHandlers.map = {
         google.maps.event.addListener(mapObj.marker, 'dragend', mapObj.onMarkerMoved);
 
         $("#" + element.getAttribute("id")).data("mapObj",mapObj);
+    },
+
+    update: function(element, valueAccessor, allBinsings, viewModel) {
+        console.log('update function');
+        var mapObj = ko.utils.unwrapObservable(valueAccessor());
+        console.log(mapObj);
+
     }
 };
 
@@ -82,8 +91,15 @@ var myMapViewModel = function() {
     self.myMap = ko.observable({
         lat: ko.observable(35.8572),
         lng: ko.observable(-78.7147),
-        markers: ko.observableArray()
+        markers: ko.observableArray([]),
+        category: ko.observable('all')
     });
+
+    this.setCategory = function(data) {
+        console.log('data ' + data);
+        self.myMap().category(data);
+    };
+
 }
 
 $(document).ready(function () {

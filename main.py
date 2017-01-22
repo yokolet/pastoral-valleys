@@ -40,13 +40,13 @@ CATEGORIES = {
     'weapons': 'gun',
     }
 
-IMAGES = {
-    'fire': 'fire.png',
-    'action': 'action.png',
-    'theft': 'thief.png',
-    'gun': 'gun.png',
-    'murder': 'skull.png',
-    'sex': 'crying.png',
+DESC = {
+    'fire': ['/image/fire.png', 'Arson'],
+    'action': ['/image/action.png', 'Assult'],
+    'theft': ['/image/thief.png', 'Burglary, Larceny, Robbery, Theft'],
+    'gun': ['/image/gun.png', 'Firearms, Shots fired, Weapons'],
+    'murder': ['/image/skull.png', 'Homicide, Murder'],
+    'sex': ['/image/crying.png', 'Sex offense, Rape'],
     }
 
 def category(words):
@@ -70,7 +70,7 @@ def extract(j_data):
                 record['lcr_desc'].capitalize(),
                 str(record['inc_datetime']).capitalize())
             tmp['category'] = cat
-            tmp['icon'] = '/image/' + IMAGES[cat]
+            tmp['icon'] = DESC[cat][0]
             records.append(tmp)
     return records
 
@@ -120,7 +120,10 @@ def koMarkedMap():
     callback = 'initMap'
     url = APP_CONFIG['map']['url']
     url = url + 'key='+ APP_CONFIG['map']['api-key']
-    return render_template('ko-marker-sample.html', url=url)
+    buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'None'}]
+    for cat in DESC:
+        buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
+    return render_template('ko-marker-sample.html', url=url, buttons=buttons)
 
 @app.errorhandler(500)
 def server_error(e):
