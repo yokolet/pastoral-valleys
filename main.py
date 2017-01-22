@@ -46,8 +46,11 @@ DESC = {
     'theft': ['/image/thief.png', 'Burglary, Larceny, Robbery, Theft'],
     'gun': ['/image/gun.png', 'Firearms, Shots fired, Weapons'],
     'murder': ['/image/skull.png', 'Homicide, Murder'],
-    'sex': ['/image/crying.png', 'Sex offense, Rape'],
+    'sex': ['/image/angry.png', 'Sex offense, Rape'],
     }
+
+INFO = """Drag the pin to see other areas.
+Click a filter button to see only one category."""
 
 def category(words):
     for listed in KEEP_LIST:
@@ -120,10 +123,10 @@ def koMarkedMap():
     callback = 'initMap'
     url = APP_CONFIG['map']['url']
     url = url + 'key='+ APP_CONFIG['map']['api-key']
-    buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'None'}]
-    for cat in DESC:
+    buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'All'}]
+    for cat in sorted(DESC):
         buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
-    return render_template('ko-marker-sample.html', url=url, buttons=buttons)
+    return render_template('ko-marker-sample.html', url=url, buttons=buttons, info=INFO)
 
 @app.errorhandler(500)
 def server_error(e):

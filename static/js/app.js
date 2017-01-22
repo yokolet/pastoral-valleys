@@ -1,11 +1,11 @@
 ko.bindingHandlers.map = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         console.log('init function');
-        var mapObj = ko.utils.unwrapObservable(valueAccessor());
+        var mapObj = ko.unwrap(valueAccessor());
         console.log(mapObj);
         var latLng = new google.maps.LatLng(
-            ko.utils.unwrapObservable(mapObj.lat),
-            ko.utils.unwrapObservable(mapObj.lng));
+            ko.unwrap(mapObj.lat),
+            ko.unwrap(mapObj.lng));
         var mapOptions = { center: latLng,
                            zoom: 16,
                            mapTypeId: google.maps.MapTypeId.ROADMAP};
@@ -22,10 +22,14 @@ ko.bindingHandlers.map = {
         mapObj.onChangedCoord = function(newValue) {
             console.log('onchangecoord');
             var latLng = new google.maps.LatLng(
-                ko.utils.unwrapObservable(mapObj.lat),
-                ko.utils.unwrapObservable(mapObj.lng));
+                ko.unwrap(mapObj.lat),
+                ko.unwrap(mapObj.lng));
             mapObj.googleMap.setCenter(latLng);
         };
+
+        mapObj.onChangedFilter = function(newValue) {
+            console.log('onchangedfileter');
+        }
 
         mapObj.onMarkerMoved = function(dragEnd) {
             console.log('onmarkmoved');
@@ -38,6 +42,7 @@ ko.bindingHandlers.map = {
 
         mapObj.lat.subscribe(mapObj.onChangedCoord);
         mapObj.lng.subscribe(mapObj.onChangedCoord);
+        mapObj.category.subscribe(mapObj.onChangedFilter);
         google.maps.event.addListener(mapObj.marker, 'dragend', mapObj.onMarkerMoved);
 
         $("#" + element.getAttribute("id")).data("mapObj",mapObj);
@@ -45,18 +50,17 @@ ko.bindingHandlers.map = {
 
     update: function(element, valueAccessor, allBinsings, viewModel) {
         console.log('update function');
-        var mapObj = ko.utils.unwrapObservable(valueAccessor());
+        var mapObj = ko.unwrap(valueAccessor());
         console.log(mapObj);
-
     }
 };
 
 var updateData = function(mapObj) {
     console.log('in updatedata: ' + mapObj.markers().length);
     console.log('0 ' + mapObj.markers()[0]);
-    for(i=0; i<mapObj.markers().length; i++) {
-         m = mapObj.markers().shift();
-         m.setMap(null);
+    while(mapObj.markers().length > 0) {
+        m = mapObj.markers().shift()
+        m.setMap(null);
     }
     console.log('after shifted: ' + mapObj.markers().length);
     url = "/api/JSON?lat=" +
@@ -98,6 +102,7 @@ var myMapViewModel = function() {
     this.setCategory = function(data) {
         console.log('data ' + data);
         self.myMap().category(data);
+        console.log(self.myMap());
     };
 
 }
