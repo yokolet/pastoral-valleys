@@ -49,9 +49,6 @@ DESC = {
     'sex': ['/image/angry.png', 'Sex offense, Rape'],
     }
 
-INFO = """Drag the pin to see other areas.
-Click a filter button to see only one category."""
-
 def category(words):
     for listed in KEEP_LIST:
         if listed in words:
@@ -126,7 +123,7 @@ def koMarkedMap():
     buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'All'}]
     for cat in sorted(DESC):
         buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
-    return render_template('ko-marker-sample.html', url=url, buttons=buttons, info=INFO)
+    return render_template('ko-marker-sample.html', url=url, buttons=buttons)
 
 @app.errorhandler(500)
 def server_error(e):

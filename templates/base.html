@@ -13,14 +13,37 @@
   </head>
   <body>
     <header>
-      <div class="top-bar">
+      <div class="top-bar map-title-bar" data-top-bar>
         <div class="top-bar-left">
-	  <a class="big-title" href="{{url_for('koMarkedMap')}}">
-            Neighborhood Map
+          <div class="menu-text map-title">City of Raleigh Crime Map
+          </div>
+        </div>
+        <div class="top-bar-right">
+          <a data-open="exampleModal1" href="#">
+            <span data-tooltip aria-haspopup="true" class="has-tip"
+                      title="About">
+            <img src="/image/about.png"
+                 alt="info">
+            </span>
           </a>
         </div>
       </div>
-      <br>
+      <div class="tiny reveal" id="exampleModal1" data-reveal>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+          <i class="fa fa-window-close-o" aria-hidden="true"></i>
+        </button>
+        <br/>
+        <h3>How to use</h3>
+        <ul>
+        <li class="lead">Location Change</li>
+        <p>Drag the pin <img src="/image/default-marker.png"/> to other areas</p>
+        <li class="lead">Filtering</li>
+        <p>Move the cursor to <i class="fa fa-bars" aria-hidden="true"></i>,
+        then click an icon</p>
+        <li class="lead">Details</li>
+        <p>Click an icon on the map</p>
+        </ul>
+      </div>
     </header>
 
     {% block content %}
@@ -29,11 +52,32 @@
     <footer>
       <div class="row">
         <div class="medium-6 columns">
-          <ul class="menu float-light">
+          <ul class="menu float-left">
             <li class="menu-text">
-              <i class="fa fa-copyright" aria-hidden="true">
-                2017 Yoko Harada
-              </i>
+              <i class="fa fa-copyright" aria-hidden="true"></i>
+              2017 Yoko Harada
+            </li>
+          </ul>
+        </div>
+        <div class="medium-6 columns">
+          <ul class="menu float-right">
+            <li>
+              <a href="https://twitter.com/yokolet">
+              <i class="fa fa-twitter-square"
+                 aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/yokolet">
+              <i class="fa fa-linkedin-square"
+                 aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yokolet">
+              <i class="fa fa-github-square"
+                 aria-hidden="true"></i>
+              </a>
             </li>
           </ul>
         </div>
@@ -41,6 +85,7 @@
     </footer>
     <script src="/js/lib/jquery.min.js"></script>
     <script src="/js/lib/foundation.js"></script>
+    <script src="/js/lib/foundation.reveal.js"></script>
     <script src="/js/lib/knockout-3.4.1.js"></script>
     <script src="/js/app.js"></script>
     <script>

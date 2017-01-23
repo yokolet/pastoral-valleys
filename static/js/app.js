@@ -14,7 +14,7 @@ ko.bindingHandlers.map = {
         mapObj.marker = new google.maps.Marker({
             map: mapObj.googleMap,
             position: latLng,
-            title: "Center",
+            title: "Drag to other areas",
             draggable: true
         });
         updateData(mapObj);
@@ -29,6 +29,18 @@ ko.bindingHandlers.map = {
 
         mapObj.onChangedFilter = function(newValue) {
             console.log('onchangedfileter');
+            var size = mapObj.markers().length;
+            console.log(size);
+            console.log(mapObj.markers()[0].category);
+            console.log(mapObj.category());
+            for(var i=0; i<mapObj.markers().length; i++) {
+                var m = mapObj.markers()[i];
+                if ('all' == mapObj.category() || m.category == mapObj.category()) {
+                    m.setVisible(true);
+                } else {
+                    m.setVisible(false);
+                }
+            }
         }
 
         mapObj.onMarkerMoved = function(dragEnd) {
@@ -75,6 +87,7 @@ var updateData = function(mapObj) {
                     map: mapObj.googleMap,
                     position: new google.maps.LatLng(entry.position.lat,
                                                      entry.position.lng),
+                    category: entry.category,
                     title: entry.title,
                     icon: entry.icon,
                 });

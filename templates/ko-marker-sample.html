@@ -2,28 +2,25 @@
 {% block content %}
 <script src="{{url}}"></script>
 <main>
-    <div class="row">
-    <div class="small-8 small-offset-4 columns">
-      <ul class="vertical medium-horizontal menu">
-        <li class="menu-text">Filters</li>
-        {% for button in buttons %}
-        <li>
-          <a href="#"
-             data-bind="click: setCategory.bind($data, '{{button['category']}}')">
-            <span data-tooltip aria-haspopup="true" class="has-tip"
-                  title="{{button['desc']}}">
-              <img src="{{button['image']}}"/>
-            </span>
-          </a>
-        </li>
-        {% endfor %}
-        <li>
-        </li>
-        <li>
-          <div class="vertical-line">
-          <img src="/image/Info.png" data-tooltip aria-haspopup="true"
-               class="has-tip" title="{{info}}"/>
-          </div>
+  <div class="row">
+    <div class="small-2 medium-1 float-right columns">
+      <ul class="vertical dropdown menu" data-dropdown-menu>
+        <li class="map-dropdown-title">
+          <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+          <ul class="menu vertical map-dropdown-menu">
+            <li class="menu-text">Filters</li>
+            {% for button in buttons %}
+            <li>
+              <a href="#"
+                 data-bind="click: setCategory.bind($data, '{{button['category']}}')">
+                <span data-tooltip aria-haspopup="true" class="has-tip"
+                      title="{{button['desc']}}">
+                  <img src="{{button['image']}}"/>
+                </span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
         </li>
       </ul>
     </div>
