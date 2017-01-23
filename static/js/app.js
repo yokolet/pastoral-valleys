@@ -111,8 +111,8 @@ var updateData = function(mapObj) {
 var myMapViewModel = function() {
     var self = this;
     self.myMap = ko.observable({
-        lat: ko.observable(35.8572),
-        lng: ko.observable(-78.7147),
+        lat: ko.observable(35.8356),
+        lng: ko.observable(-78.6395),
         markers: ko.observableArray([]),
         category: ko.observable('all')
     });
