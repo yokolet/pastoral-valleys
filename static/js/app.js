@@ -1,8 +1,6 @@
 ko.bindingHandlers.map = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-        console.log('init function');
         var mapObj = ko.unwrap(valueAccessor());
-        console.log(mapObj);
         var latLng = new google.maps.LatLng(
             ko.unwrap(mapObj.lat),
             ko.unwrap(mapObj.lng));
@@ -21,7 +19,6 @@ ko.bindingHandlers.map = {
         updateData(mapObj);
 
         mapObj.onChangedCoord = function(newValue) {
-            console.log('onchangecoord');
             var latLng = new google.maps.LatLng(
                 ko.unwrap(mapObj.lat),
                 ko.unwrap(mapObj.lng));
@@ -29,11 +26,7 @@ ko.bindingHandlers.map = {
         };
 
         mapObj.onChangedFilter = function(newValue) {
-            console.log('onchangedfileter');
             var size = mapObj.markers().length;
-            console.log(size);
-            console.log(mapObj.markers()[0].category);
-            console.log(mapObj.category());
             for(var i=0; i<mapObj.markers().length; i++) {
                 var m = mapObj.markers()[i];
                 if ('all' == mapObj.category() || m.category == mapObj.category()) {
@@ -45,11 +38,9 @@ ko.bindingHandlers.map = {
         }
 
         mapObj.onMarkerMoved = function(dragEnd) {
-            console.log('onmarkmoved');
             var latLng = mapObj.marker.getPosition();
             mapObj.lat(latLng.lat());
             mapObj.lng(latLng.lng());
-            console.log('on fn: ' + mapObj.markers().length);
             updateData(mapObj);
         };
 
@@ -62,26 +53,20 @@ ko.bindingHandlers.map = {
     },
 
     update: function(element, valueAccessor, allBinsings, viewModel) {
-        console.log('update function');
         var mapObj = ko.unwrap(valueAccessor());
-        console.log(mapObj);
     }
 };
 
 var updateData = function(mapObj) {
-    console.log('in updatedata: ' + mapObj.markers().length);
-    console.log('0 ' + mapObj.markers()[0]);
     while(mapObj.markers().length > 0) {
         m = mapObj.markers().shift()
         m.setMap(null);
     }
-    console.log('after shifted: ' + mapObj.markers().length);
     url = "/api/JSON?lat=" +
         ko.utils.unwrapObservable(mapObj.lat) +
         "&lng=" +
         ko.utils.unwrapObservable(mapObj.lng);
     $.getJSON(url, function(data) {
-        console.log("data should be here")
         $.each(data, function(i, entry) {
             if (entry.position) {
                 var marker = new google.maps.Marker({
@@ -118,9 +103,7 @@ var myMapViewModel = function() {
     });
 
     this.setCategory = function(data) {
-        console.log('data ' + data);
         self.myMap().category(data);
-        console.log(self.myMap());
     };
 
 }
