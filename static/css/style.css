@@ -32,15 +32,19 @@ body {
     background-color: #b5a397;
 }
 
+.info-modal-title {
+    font-weight: 700;
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+}
+.info-modal {
+    font-size: 12px;
+}
+
 .row {
     margin: 0px;
     padding: 2px;
     background-color: #f6f1ed;
-}
-
-.vertical-line {
-    padding-left: 10px;
-    border-left: 1px solid rgba(0, 0, 0, 0.2);;
 }
 
 #map {

@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="top-bar-right">
-          <a data-open="exampleModal1" href="#">
+          <a data-open="infoModal" href="#">
             <span data-tooltip aria-haspopup="true" class="has-tip"
                       title="About">
             <img src="/image/about.png"
@@ -28,21 +28,34 @@
           </a>
         </div>
       </div>
-      <div class="tiny reveal" id="exampleModal1" data-reveal>
+      <div class="tiny reveal" id="infoModal" data-reveal>
         <button class="close-button" data-close aria-label="Close modal" type="button">
           <i class="fa fa-window-close-o" aria-hidden="true"></i>
         </button>
         <br/>
-        <h3>How to use</h3>
-        <ul>
-        <li class="lead">Location Change</li>
-        <p>Drag the pin <img src="/image/default-marker.png"/> to other areas</p>
-        <li class="lead">Filtering</li>
-        <p>Move the cursor to <i class="fa fa-bars" aria-hidden="true"></i>,
-        then click an icon</p>
-        <li class="lead">Details</li>
-        <p>Click an icon on the map</p>
-        </ul>
+        <div class="info-modal-title">About Data</div>
+        <div class="info-modal">
+          <a href="https://data.raleighnc.gov/category/public-safety">
+            City of Raleigh, Public Safefy
+          </a>
+        </div>
+        <div class="info-modal-title">How to use</div>
+        <div class="info-modal">
+          <ul>
+            <li class="lead">Location Change</li>
+            <div>
+              Drag the pin <img src="/image/default-marker.png"/> to
+              other areas
+            </div>
+            <li class="lead">Filtering</li>
+            <div>
+              Move the cursor to <i class="fa fa-bars" aria-hidden="true"></i>,
+              then click an icon
+            </div>
+            <li class="lead">Details</li>
+            <div>Click an icon on the map</div>
+          </ul>
+        </div>
       </div>
     </header>
 
