@@ -6,8 +6,14 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+# Reads application config, which has API keys and
+# SoQL parameters.
 APP_CONFIG = json.loads(open('app-config.json', 'r').read())
 
+
+# If title includes the words in this list,
+# the record will be used.
+# Original data has more than 400 different titles.
 KEEP_LIST = [
     'arson',
     'assault',
@@ -24,6 +30,8 @@ KEEP_LIST = [
     'weapons'
     ]
 
+
+# Further, narrows down to six categories
 CATEGORIES = {
     'arson': 'fire',
     'assault': 'action',
@@ -40,6 +48,8 @@ CATEGORIES = {
     'weapons': 'gun',
     }
 
+
+# Description dictionary for markers
 DESC = {
     'fire': ['/image/fire.png', 'Arson'],
     'action': ['/image/action.png', 'Assult'],
@@ -49,13 +59,18 @@ DESC = {
     'sex': ['/image/angry.png', 'Sex offense, Rape'],
     }
 
+
 def category(words):
+    """Given words (title), returns its category"""
     for listed in KEEP_LIST:
         if listed in words:
             return CATEGORIES[listed]
     return None
 
+
 def extract(j_data):
+    """Given original data from OpenData, cleans up and narrows down
+    to relevant records."""
     records = []
     for record in j_data:
         tmp = {}
@@ -77,12 +92,15 @@ def extract(j_data):
 
 @app.route('/api/JSON')
 def getJSON():
+    """API endpoint to JavaScript client.
+    This method expects the request, /api/JSON?lat=xxx&lng=xxx ,
+    and returns JSON data."""
     lat = request.args.get('lat')
     lng = request.args.get('lng')
     url = APP_CONFIG['opendata']['url']
     url = url + '$limit=' + str(APP_CONFIG['opendata']['limit'])
     url = url + '&$$app_token=' + APP_CONFIG['opendata']['app_token']
-    # within_circle(field, lat, lng, radius)
+    # SoQL query: within_circle(field, lat, lng, radius)
     where_query = '&$where=within_circle(location, %s, %s, %s)' % (
         lat, lng, APP_CONFIG['opendata']['radius'])
     print(where_query)
@@ -95,37 +113,19 @@ def getJSON():
 
 
 @app.route('/')
-def hello():
-    return 'Hello World!';
-
-
-@app.route('/marker-sample')
-def markedMap():
-    callback = 'initMap'
-    url = APP_CONFIG['map']['url']
-    url = url + 'key='+ APP_CONFIG['map']['api-key']
-    url = url + '&callback=' + callback
-    return render_template('marker-sample.html', url=url)
-
-@app.route('/soda-sample')
-def sodaSample():
-    callback = 'initSodaMap'
-    url = APP_CONFIG['map']['url']
-    url = url + 'key='+ APP_CONFIG['map']['api-key']
-    url = url + '&callback=' + callback
-    return render_template('soda-sample.html', url=url)
-
-@app.route('/ko-marker-sample')
 def koMarkedMap():
+    """The neighborhood map application."""
     callback = 'initMap'
     url = APP_CONFIG['map']['url']
     url = url + 'key='+ APP_CONFIG['map']['api-key']
     buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'All'}]
     for cat in sorted(DESC):
         buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
-    return render_template('ko-marker-sample.html', url=url, buttons=buttons)
+    return render_template('ko-map.html', url=url, buttons=buttons)
+
 
 @app.errorhandler(500)
 def server_error(e):
+    """Error handling for 500 (Internal Error)"""
     logging.exception('An error occurred during a request.')
     return 'An internal error occurred.', 500

@@ -24,7 +24,7 @@ body {
 }
 
 .map-dropdown-menu {
-    min-width: 80px;
+    min-width: 40px;
     background: #b5a397;
 }
 
@@ -45,7 +45,7 @@ body {
 
 #map {
     height: 600px;
-    width: 100%;
+    width: 90%;
 }
 
 @media screen and (max-width: 600px) {
@@ -57,4 +57,9 @@ body {
         font-size: 1.0rem;
         font-weight: 600;
     }
+
+    #map {
+        width: 87%;
+    }
+
 }
