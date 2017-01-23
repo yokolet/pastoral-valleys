@@ -15,7 +15,8 @@ ko.bindingHandlers.map = {
             map: mapObj.googleMap,
             position: latLng,
             title: "Drag to other areas",
-            draggable: true
+            draggable: true,
+            animation: google.maps.Animation.DROP
         });
         updateData(mapObj);
 
@@ -96,6 +97,10 @@ var updateData = function(mapObj) {
                 });
                 marker.addListener('click', function() {
                     infoObj.open(mapObj.googleMap, marker);
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                });
+                infoObj.addListener('closeclick', function() {
+                    marker.setAnimation(null);
                 });
                 mapObj.markers().push(marker);
             }
