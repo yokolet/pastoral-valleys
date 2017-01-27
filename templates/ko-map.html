@@ -2,29 +2,66 @@
 {% block content %}
 <script src="{{url}}"></script>
 <main>
-  <div class="row">
-    <div class="small-1 medium-1 small-offset-11 medium-offset-10 columns">
-      <ul class="vertical dropdown menu" data-dropdown-menu>
-        <li class="map-dropdown-title">
-          <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
-          <ul class="menu vertical map-dropdown-menu">
-            <li class="menu-text">Filters</li>
-            {% for button in buttons %}
-            <li>
-              <a href="#"
-                 data-bind="click: setCategory.bind($data, '{{button['category']}}')">
-                <span data-tooltip aria-haspopup="true" class="has-tip"
-                      title="{{button['desc']}}">
-                  <img src="{{button['image']}}"/>
-                </span>
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-        </li>
-      </ul>
+<div class="off-canvas position-left is-transition-push"
+     id="offCanvasLeft"
+     data-off-canvas
+     data-position="left"
+     aria-hidden="true">
+  <button class="close-button float-right" aria-lebal="Close menu"
+          type="button" data-close>
+    <span class="close-marker" aria-hidden="true">x</span>
+  </button>
+  <br/><br/>
+  <ul class="mobile-ofc vertical menu">
+    <li>
+      <div class="row">
+        <div class="small-6 columns">
+          <span class="menu-title">Location</span>
+        </div>
+        <div class="small-6 columns">
+          <button class="button float-left" type="button"
+                  data-toggle="example-dropdown">
+            Filter
+          </button>
+          <div class="dropdown-pane" id="example-dropdown"
+               data-dropdown>
+            <ul class="vertical dropdown menu">
+              {% for button in buttons %}
+              <li>
+                <a href="#"
+                   data-bind="click: setCategory.bind($data, '{{button['category']}}')">
+                  <span data-tooltip aria-haspopup="true" class="has-tip"
+                        title="{{button['desc']}}">
+                    <img src="{{button['image']}}"/>
+                  </span>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+    <ul class="submenu menu vertical" data-submenu>
+      <li><a href="#">Triangle Town Center</a></li>
+      <li><a href="#">Downtown</a></li>
+      <li><a href="#">Option 3</a></li>
+    </ul>
+  </ul>
+</div>
+<div class="off-canvas-content" data-off-canvas-content>
+  <div class="expended row">
+    <div class="medium-10 large-10
+                columns">
+      <div>
+        <button type="button" class="menu-icon dark"
+                data-toggle="offCanvasLeft" aria-expanded="false"
+                aria-controls="offCanvasLeft">
+        </button>
+      </div>
     </div>
   </div>
+</div>
   <div class="row">
     <div class="small-12 columns">
       <div id="map" data-bind="map: myMap"></div>

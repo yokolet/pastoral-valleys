@@ -32,6 +32,33 @@ body {
     background-color: #b5a397;
 }
 
+.off-canvas {
+    background: #b5a397;
+}
+
+.close-marker {
+    font-weight: 700;
+}
+
+.menu-title {
+    color: #6a5750;
+    font-weight: 700;
+}
+
+.mobile-ofc .menu a {
+    height: 45px;
+    line-height: 45px;
+    color: #f6f1ed;
+    font-weight: 700;
+    font-size: 0.9em;
+    paddin-top: 0;
+    padding-buttom: 0;
+}
+
+.dropdown-pane {
+    width: 100px;
+}
+
 .info-modal-title {
     font-weight: 700;
     font-size: 20px;
@@ -49,7 +76,7 @@ body {
 
 #map {
     height: 600px;
-    width: 90%;
+    width: 100%;
 }
 
 @media screen and (max-width: 600px) {
@@ -60,10 +87,6 @@ body {
     .map-title {
         font-size: 1.0rem;
         font-weight: 600;
-    }
-
-    #map {
-        width: 87%;
     }
 
 }

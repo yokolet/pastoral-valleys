@@ -124,6 +124,11 @@ def koMarkedMap():
     return render_template('ko-map.html', url=url, buttons=buttons)
 
 
+@app.route('/heatmap-sample')
+def headSample():
+    return render_template('heatmap-sample.html')
+
+
 @app.errorhandler(500)
 def server_error(e):
     """Error handling for 500 (Internal Error)"""
