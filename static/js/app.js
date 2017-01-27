@@ -34,7 +34,7 @@ ko.bindingHandlers.map = {
 
         // a callback function when the center pin is moved
         mapObj.onChangedCoord = function(newValue) {
-            var latLng = new google.maps.LatLng(
+             var latLng = new google.maps.LatLng(
                 ko.unwrap(mapObj.lat),
                 ko.unwrap(mapObj.lng));
             mapObj.googleMap.setCenter(latLng);
@@ -62,11 +62,20 @@ ko.bindingHandlers.map = {
             updateData(mapObj);
         };
 
+        mapObj.onCenterChanged = function(newValue) {
+            var latLng = new google.maps.LatLng(
+                ko.unwrap(mapObj.lat),
+                ko.unwrap(mapObj.lng));
+            mapObj.marker.setPosition(latLng);
+            updateData(mapObj);
+        }
+
         // set callback functions to the objects
         mapObj.lat.subscribe(mapObj.onChangedCoord);
         mapObj.lng.subscribe(mapObj.onChangedCoord);
         mapObj.category.subscribe(mapObj.onChangedFilter);
         google.maps.event.addListener(mapObj.marker, "dragend", mapObj.onMarkerMoved);
+        google.maps.event.addListener(mapObj.googleMap, "center_changed", mapObj.onCenterChanged);
 
         // bind this hander to the DOM element
         $("#" + element.getAttribute("id")).data("mapObj",mapObj);
