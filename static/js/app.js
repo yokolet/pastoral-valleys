@@ -25,7 +25,7 @@ ko.bindingHandlers.map = {
         mapObj.marker = new google.maps.Marker({
             map: mapObj.googleMap,
             position: latLng,
-            title: "Drag to other areas",
+            title: "Drag to another location",
             draggable: true,
             animation: google.maps.Animation.DROP
         });
@@ -136,8 +136,9 @@ var myMapViewModel = function() {
     var self = this;
     // obervable models
     self.myMap = ko.observable({
-        lat: ko.observable(35.8356),
-        lng: ko.observable(-78.6395),
+        // Brier Creek lat and lng
+        lat: ko.observable(35.912697),
+        lng: ko.observable(-78.781792),
         markers: ko.observableArray([]),
         category: ko.observable("all")
     });
