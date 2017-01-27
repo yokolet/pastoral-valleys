@@ -137,6 +137,12 @@ var myMapViewModel = function() {
     this.setCategory = function(data) {
         self.myMap().category(data);
     };
+
+    this.setCenter = function(lat, lng) {
+        console.log(lat + ", " + lng);
+        self.myMap().lat(lat);
+        self.myMap().lng(lng);
+    };
 }
 
 $(document).ready(function () {

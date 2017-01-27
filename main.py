@@ -59,6 +59,50 @@ DESC = {
     'sex': ['/image/angry.png', 'Sex offense, Rape'],
     }
 
+AREAS = [
+    {'name': 'Boylan Heights',
+     'lat': 35.773880,
+     'lng': -78.652844},
+    {'name': 'Brier Creek',
+     'lat': 35.912697,
+     'lng': -78.781792},
+    {'name': 'Cameron Park',
+     'lat': 35.786081,
+     'lng': -78.655259},
+    {'name': 'Cameron Village',
+     'lat': 35.792093,
+     'lng': -78.661181},
+    {'name': 'Capital District',
+     'lat': 35.781249,
+     'lng': -78.640032},
+    {'name': 'Fairmont',
+     'lat': 35.790328,
+     'lng': -78.670397},
+    {'name': 'Fayetteville Street',
+     'lat': 35.772954,
+     'lng': -78.639502},
+    {'name': 'Five Points',
+     'lat': 35.805704,
+     'lng': -78.641117},
+    {'name': 'Lassiter Mill',
+     'lat': 35.829012,
+     'lng': -78.648467},
+    {'name': 'Mordecai',
+     'lat': 35.795710,
+     'lng': -78.635541},
+    {'name': 'North Hills',
+     'lat': 35.834982,
+     'lng': -78.638971},
+    {'name': 'Northeast Raleigh',
+     'lat': 35.863358,
+     'lng': -78.571559},
+    {'name': 'Umstead',
+     'lat': 35.890672,
+     'lng': -78.750061},
+    {'name': 'Wade',
+     'lat': 35.809230,
+     'lng': -78.734234}
+    ]
 
 def category(words):
     """Given words (title), returns its category"""
@@ -121,7 +165,7 @@ def koMarkedMap():
     buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'All'}]
     for cat in sorted(DESC):
         buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
-    return render_template('ko-map.html', url=url, buttons=buttons)
+    return render_template('ko-map.html', url=url, buttons=buttons, areas=AREAS)
 
 
 @app.route('/heatmap-sample')

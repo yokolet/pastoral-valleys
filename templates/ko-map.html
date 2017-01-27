@@ -43,9 +43,11 @@
       </div>
     </li>
     <ul class="submenu menu vertical" data-submenu>
-      <li><a href="#">Triangle Town Center</a></li>
-      <li><a href="#">Downtown</a></li>
-      <li><a href="#">Option 3</a></li>
+      {% for area in areas %}
+      <li><a href="#"
+             data-bind="click: setCenter.bind($data,
+             '{{area['lat']}}', '{{area['lng']}}')">{{area['name']}}</a></li>
+      {% endfor %}
     </ul>
   </ul>
 </div>
