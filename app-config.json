@@ -3,6 +3,10 @@
         "url": "https://maps.googleapis.com/maps/api/js?",
         "api-key": "AIzaSyALQwhclKKOlpNl04pj2rkWiLvyETZcHB8"
     },
+    "geo": {
+        "url": "https://maps.googleapis.com/maps/api/geocode/json?",
+        "api-key": "AIzaSyDkRdFTakUHXptIYa196SzlgMcPuhXD6AE"
+    },
     "opendata": {
         "url": "https://data.raleighnc.gov/resource/emea-ai2t.json?",
         "app_token": "8wYTL4S7Q97GgZtuUBIe5SEnC",

@@ -59,50 +59,32 @@ DESC = {
     'sex': ['/image/angry.png', 'Sex offense, Rape'],
     }
 
-AREAS = [
-    {'name': 'Boylan Heights',
-     'lat': 35.773880,
-     'lng': -78.652844},
-    {'name': 'Brier Creek',
-     'lat': 35.912697,
-     'lng': -78.781792},
-    {'name': 'Cameron Park',
-     'lat': 35.786081,
-     'lng': -78.655259},
-    {'name': 'Cameron Village',
-     'lat': 35.792093,
-     'lng': -78.661181},
-    {'name': 'Capital District',
-     'lat': 35.781249,
-     'lng': -78.640032},
-    {'name': 'Fairmont',
-     'lat': 35.790328,
-     'lng': -78.670397},
-    {'name': 'Fayetteville Street',
-     'lat': 35.772954,
-     'lng': -78.639502},
-    {'name': 'Five Points',
-     'lat': 35.805704,
-     'lng': -78.641117},
-    {'name': 'Lassiter Mill',
-     'lat': 35.829012,
-     'lng': -78.648467},
-    {'name': 'Mordecai',
-     'lat': 35.795710,
-     'lng': -78.635541},
-    {'name': 'North Hills',
-     'lat': 35.834982,
-     'lng': -78.638971},
-    {'name': 'Northeast Raleigh',
-     'lat': 35.867352,
-     'lng': -78.569349},
-    {'name': 'Umstead',
-     'lat': 35.890672,
-     'lng': -78.750061},
-    {'name': 'Wade',
-     'lat': 35.809230,
-     'lng': -78.734234}
+ZIPCODES = [
+    27601, 27603, 27604, 27605, 27606, 27607, 27608, 27609,
+    27610, 27612, 27613, 27614, 27615, 27616, 27617
     ]
+
+
+GEO_ENDPOINT = APP_CONFIG['geo']['url'] + 'key=' + APP_CONFIG['geo']['api-key']
+
+
+def queryZipcode(zipcode):
+    area = {'zipcode': zipcode}
+    address = '&address=%s' % zipcode
+    url = GEO_ENDPOINT + address
+    response = rq.get(url)
+    print(url)
+    print(response)
+    if response.status_code == 200:
+      if 'results' in response.json() and len(response.json()) > 0:
+          location = response.json()['results'][0]['geometry']['location']
+          area['lat'] = location['lat']
+          area['lng'] = location['lng']
+    return area
+
+
+LOCATIONS = [queryZipcode(zipcode) for zipcode in ZIPCODES]
+
 
 def category(words):
     """Given words (title), returns its category"""
@@ -156,6 +138,11 @@ def getJSON():
         return json.dumps(smaller_data)
 
 
+@app.route('/api/zipcode/JSON')
+def getZipCoord():
+    return json.dumps(LOCATIONS)
+
+
 @app.route('/')
 def koMarkedMap():
     """The neighborhood map application."""
@@ -171,6 +158,12 @@ def koMarkedMap():
 @app.route('/heatmap-sample')
 def headSample():
     return render_template('heatmap-sample.html')
+
+@app.route('/another-map')
+def anotherMap():
+    url = APP_CONFIG['map']['url']
+    url = url + 'key='+ APP_CONFIG['map']['api-key']
+    return render_template('another-map.html', url=url, locations=LOCATIONS)
 
 
 @app.errorhandler(500)
