@@ -1,8 +1,29 @@
 # Neighborhood Map - Raleigh, NC
 
-This application shows a map with data from
-[City of Raleigh, Public Safefy](https://data.raleighnc.gov/category/public-safety)
-plotted on.
+## Motivation
+
+When I find my apartment to live next, I consider many factors: a rent, layout, facility,
+walkscore and safety. Among them, the safety is very important. I often visit local news
+media website and check incidents. Luckily, my city, Raleigh, NC is a safe place, so I
+don't see many crime reports on the news site. However, I hear small incidents once
+in a while. So, I decided to explore past crime reports published by City of Raleigh.
+The data is from
+[City of Raleigh, Public Safefy](https://data.raleighnc.gov/category/public-safety).
+
+When I firstly saw my app rendered crime icons on the map, I thought my app had a bug
+or such. That's because I saw really many, so many, icons on the map. Soon, I
+figured out those were correct from the description and date. Probably, 90% of those
+don't bother individuals unless they become a victim. Suppose something was stolen from my car
+while parking. That would hurt me seriously, but a very small incident to majority.
+Apparently, the incident won't deserve to be a news even on the local media.
+
+The data includes the report since 2005. The data shows, during 10 years, almost
+everywhere had some sort of crimes. The difference is some areas have more,
+while others have less. It is a good information to choose the area for an apartment
+hunting.
+
+
+## Application site
 
 The website is up and running at <https://pastoral-valleys-1484764452484.appspot.com/> .
 Alternatively, the shortened url [`goo.gl/gFy5tQ`](https://goo.gl/gFy5tQ) works as well.
@@ -36,29 +57,19 @@ ASSAULT WITH OTHER DANGEROUS WEAPON
 After changing all to lower case, I still see more than 100 types.
 
 
-Because of this nature, it's not a good idea to process data on JavaScript to make a marker.
+Because of this nature, it's not a good idea to process data on JavaScript to make markers.
 On this app, the pre-processing is done in the server side.
 The server makes query to OpenData API endpoint. The relevant records are extracted and
-converted to smaller JSON, which makes JavaScript work lighter.
+converted to smaller JSON, which makes JavaScript work less.
 
-The definition of relevant data is the crime records that may affect my apartment search.
+The definition of relevant data is the crime records that may affect my apartment hunting.
 If the category part of `lcr_desc` field includes one of the following words, the record
-is used to plot marker. Otherwise, it will be dropped from JSON data to send out to JavaScript client.
+is used to plot marker. Otherwise, it will be dropped from JSON data to send out to
+JavaScript client.
 
 ```
-'arson',
-'assault',
-'burglary',
-'firearm',
-'homicide',
-'larceny',
-'murder',
-'rape',
-'robbery',
-'sex',
-'shots',
-'theft',
-'weapons'
+'arson', 'assault', 'burglary', 'firearm', 'homicide', 'larceny',
+'murder', 'rape', 'robbery', 'sex', 'shots', 'theft', 'weapons'
 ```
 
 
@@ -77,7 +88,7 @@ The Knockout app renders Google map and markers based on the data back from Flas
 
 
 
-# How to run
+# How to run locally
 
 ## Google App Engine SDK
 
@@ -125,25 +136,33 @@ http://localhost:8080
 # How to use
 
 
-The app has three features:
+The app has four features:
 
-1. move a pin
-2. filter the crimes
-3. show details of each crime
+1. choose an area
+2. show crimes
+3. filter crimes by category
+4. show details of each crime
 
-## Moving a pin to other areas
+## Choosing an area
 
-The pin on the center is draggable. When the pin is moved, the app gets new data around the
-pin's position. The data is limited to City of Raleigh provides.
+A list of areas shows up when hamburger icon on the top left gets clicked.
+Click this icon and see what pin points what area.
+
+
+## Showing crimes in the area
+
+Click the pin, which triggers to making a request to City of Raleigh Open Data API.
+
 
 ## Filtering the crimes
 
-The dropdown menu (hamburger icon) has choices to show only one category.
-When one of them is clicked, the map shows only chosen category markers.
+The filter dropdown menu (in the left side pane) has choices to show only one category.
+When one of them is clicked, the map shows markers of a chosen category.
+
 
 ## Showing details
 
-Each marker is clickable. When the marker is clicked, it shows the details of the crime.
+Each crime marker is clickable. When the marker is clicked, it shows the details of the crime.
 
 
 # Files
@@ -159,13 +178,6 @@ Each marker is clickable. When the marker is clicked, it shows the details of th
 - `static/image`: a directory for image files
 - `static/js`: a directory for JavaScript files
 - `templates`: a directory for Jinja2 template files
-
-
-# Known problem
-
-All features of the app work on browsers of OSX platform.
-However, the filtering feature does not work on web browsers of iPhone and iPad.
-Moving the pin and showing details work.
 
 
 ### Credit to icons

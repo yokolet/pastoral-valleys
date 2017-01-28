@@ -32,6 +32,8 @@ ko.bindingHandlers.anothermap = {
             console.log(mapObj.current());
             mapObj.locations().forEach(function(loc) {
                 console.log("onAreanameLoad: " + loc.lat + ", " + loc.lng);
+                var content_string = "Area Name: <b>" + loc.areaname + "</b>";
+                content_string += "<br/>Click this pin for crime data"
                 var marker = new google.maps.Marker({
                     map: mapObj.googleMap,
                     position: new google.maps.LatLng(loc.lat,
@@ -39,16 +41,11 @@ ko.bindingHandlers.anothermap = {
                     title: loc.areaname,
                     animation: google.maps.Animation.DROP,
                     info: new google.maps.InfoWindow({
-                        content: "Area Name: " + loc.areaname
+                        content: content_string
                     })
                 });
                 marker.addListener("click", function() {
-                    // load data
-                    // change center
-                    // change zoom
                     updateData(mapObj, marker);
-                    //marker.info.open(mapObj.googleMap, marker);
-                    //marker.setAnimation(google.maps.Animation.BOUNCE);
                 });
                 // add listener function when infowindow is closed.
                 marker.info.addListener("closeclick", function() {
