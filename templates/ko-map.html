@@ -21,7 +21,7 @@
         <div class="small-6 columns">
           <button class="button float-left" type="button"
                   data-toggle="example-dropdown">
-            Filter
+            <span class="menu-button-face">Filter</span>
           </button>
           <div class="dropdown-pane" id="example-dropdown"
                data-dropdown>
@@ -44,9 +44,12 @@
     </li>
     <ul class="submenu menu vertical" data-submenu>
       {% for loc in locations %}
-      <li><a href="#"
-             data-bind="click: setCurrent.bind($data,
-             '{{loop.index}}, {{loc['lat']}}', '{{loc['lng']}}')">{{loc['name']}}</a></li>
+      <li class="submenu-item">
+        <a href="#"
+             data-bind="click: setCurrent.bind($data,'{{loop.index}}','{{loc['lat']}}','{{loc['lng']}}')">
+          {{loc['name']}}
+        </a>
+      </li>
       {% endfor %}
     </ul>
   </ul>

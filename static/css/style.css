@@ -45,6 +45,11 @@ body {
     font-weight: 700;
 }
 
+.menu-button-face {
+    color: #f6f1ed;
+    font-weight: 700;
+}
+
 .mobile-ofc .menu a {
     height: 45px;
     line-height: 45px;
@@ -55,8 +60,16 @@ body {
     padding-buttom: 0;
 }
 
+.submenu-item {
+    padding-left: 5px;
+}
+
+.menu > li > a {
+    padding: 0px;
+}
+
 .dropdown-pane {
-    width: 100px;
+    width: 70px;
 }
 
 .info-modal-title {
@@ -89,4 +102,20 @@ body {
         font-weight: 600;
     }
 
+    .position-left {
+        width: 150px;
+    }
+
+    .menu-title,
+    .menu-button-face {
+        font-size: 0.7em;
+    }
+
+    .dropdown-pane {
+        width: 50px;
+    }
+
+    .mobile-ofc .menu a {
+        font-size: 0.5em;
+    }
 }
