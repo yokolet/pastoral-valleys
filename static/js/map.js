@@ -1,5 +1,5 @@
 var Location = function(data) {
-    this.zipcode = data["zipcode"];
+    this.areaname = data["name"];
     this.lat = data["lat"];
     this.lng = data["lng"];
 }
@@ -8,13 +8,13 @@ var Location = function(data) {
 ko.bindingHandlers.anothermap = {
     init: function (element, valueAccessor, allBindings, viewModel) {
         var value = valueAccessor();
-        var zipcode = value.zipcode;
+        var areaname = value.areaname;
         var lat = value.centerLat;
         var lng = value.centerLng;
-        console.log("init: " + zipcode + ", "+ lat + ", " + lng);
+        console.log("init: " + areaname + ", "+ lat + ", " + lng);
         var mapObj = ko.unwrap(value.mapState);
-        mapObj.current(new Location({"zipcode": zipcode, "lat": lat, "lng": lng}));
-        zipcodeData(mapObj);
+        mapObj.current(new Location({"areaname": areaname, "lat": lat, "lng": lng}));
+        areanameData(mapObj);
         $("#" + element.getAttribute("id")).data("mapObj",mapObj);
     },
     update: function (element, valueAccessor, allBindings, viewModel) {
@@ -27,23 +27,28 @@ ko.bindingHandlers.anothermap = {
                            mapTypeId: google.maps.MapTypeId.ROADMAP};
         mapObj.googleMap = new google.maps.Map(element, mapOptions);
 
-        mapObj.onZipcodeLoad = function(data) {
-            console.log("onZipcodeLoad");
+        mapObj.onAreanameLoad = function(data) {
+            console.log("onAreanameLoad");
             console.log(mapObj.current());
             mapObj.locations().forEach(function(loc) {
+                console.log("onAreanameLoad: " + loc.lat + ", " + loc.lng);
                 var marker = new google.maps.Marker({
                     map: mapObj.googleMap,
                     position: new google.maps.LatLng(loc.lat,
                                                      loc.lng),
-                    title: "Click for details",
+                    title: loc.areaname,
                     animation: google.maps.Animation.DROP,
                     info: new google.maps.InfoWindow({
-                        content: "zipcode: " + loc.zipcode
+                        content: "Area Name: " + loc.areaname
                     })
                 });
                 marker.addListener("click", function() {
-                    marker.info.open(mapObj.googleMap, marker);
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                    // load data
+                    // change center
+                    // change zoom
+                    updateData(mapObj, marker);
+                    //marker.info.open(mapObj.googleMap, marker);
+                    //marker.setAnimation(google.maps.Animation.BOUNCE);
                 });
                 // add listener function when infowindow is closed.
                 marker.info.addListener("closeclick", function() {
@@ -52,7 +57,7 @@ ko.bindingHandlers.anothermap = {
                 mapObj.locMarkers().push(marker);
             });
         }
-        mapObj.locationLoaded.subscribe(mapObj.onZipcodeLoad);
+        mapObj.locationLoaded.subscribe(mapObj.onAreanameLoad);
 
         mapObj.onCurrentChange = function(data) {
             console.log("current: " + mapObj.currentMarker().title);
@@ -66,11 +71,26 @@ ko.bindingHandlers.anothermap = {
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
         mapObj.currentMarker.subscribe(mapObj.onCurrentChange);
+
+        // a callback function when the filter is changed
+        mapObj.onChangedFilter = function(data) {
+            var size = mapObj.crimeMarkers().length;
+            var markers = mapObj.crimeMarkers();
+            for(var i=0; i<markers.length; i++) {
+                var m = markers[i];
+                if ("all" == mapObj.category() || m.category == mapObj.category()) {
+                    m.setVisible(true);
+                } else {
+                    m.setVisible(false);
+                }
+            }
+        }
+        mapObj.category.subscribe(mapObj.onChangedFilter);
     }
 };
 
-var zipcodeData = function(mapObj) {
-    url = "/api/zipcode/JSON?";
+var areanameData = function(mapObj) {
+    url = "/api/location/JSON?";
     $.getJSON(url, function(data) {
         $.each(data, function(i, entry) {
             //console.log(i + ": " + entry);
@@ -80,6 +100,51 @@ var zipcodeData = function(mapObj) {
         console.log(mapObj.current().lat);
         console.log(mapObj.current().lng);
         mapObj.locationLoaded(true);
+    });
+};
+
+var updateData = function(mapObj, marker) {
+    // clear all markers in the old place
+    while(mapObj.crimeMarkers().length > 0) {
+        m = mapObj.crimeMarkers().shift()
+        m.setMap(null);
+    }
+    var lat = marker.position.lat();
+    var lng = marker.position.lng();
+    console.log("updateData: " + lat + ", " + lng);
+    // make a request to API endpoint
+    url = "/api/JSON?lat=" + lat + "&lng=" + lng;
+    $.getJSON(url, function(data) {
+        $.each(data, function(i, entry) {
+            if (entry.position) {
+                // create each marker
+                var marker = new google.maps.Marker({
+                    map: mapObj.googleMap,
+                    position: new google.maps.LatLng(entry.position.lat,
+                                                     entry.position.lng),
+                    category: entry.category,
+                    title: entry.title,
+                    icon: entry.icon,
+                });
+                // create an infowindow of this marker
+                var infoObj = new google.maps.InfoWindow({
+                    content: entry.content
+                });
+                // add lister function when infowindow is opened.
+                marker.addListener("click", function() {
+                    infoObj.open(mapObj.googleMap, marker);
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                });
+                // add listener function when infowindow is closed.
+                infoObj.addListener("closeclick", function() {
+                    marker.setAnimation(null);
+                });
+                // saves markers
+                mapObj.crimeMarkers().push(marker);
+            }
+        });
+        mapObj.googleMap.setCenter(marker.position);
+        mapObj.googleMap.setZoom(16);
     });
 };
 
@@ -95,7 +160,9 @@ var mapModel = function() {
         current: ko.observable(),
         locMarkers: ko.observableArray([]),
         previousMarker: ko.observable(),
-        currentMarker: ko.observable()
+        currentMarker: ko.observable(),
+        crimeMarkers: ko.observableArray([]),
+        category: ko.observable("al"),
     });
 
     this.setCurrent = function(index, lat, lng) {
@@ -103,6 +170,12 @@ var mapModel = function() {
         self.mapState().previousMarker(self.mapState().currentMarker());
         self.mapState().currentMarker(self.mapState().locMarkers()[parseInt(index)-1]);
     };
+
+    // a function called when filter button is clicked
+    this.setCategory = function(data) {
+        self.mapState().category(data);
+    };
+
 }
 
 $(document).ready(function () {

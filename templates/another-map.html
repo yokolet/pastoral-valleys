@@ -16,7 +16,7 @@
     <li>
       <div class="row">
         <div class="small-6 columns">
-          <span class="menu-title">Zipcode</span>
+          <span class="menu-title">Area</span>
         </div>
         <div class="small-6 columns">
           <button class="button float-left" type="button"
@@ -46,7 +46,7 @@
       {% for loc in locations %}
       <li><a href="#"
              data-bind="click: setCurrent.bind($data,
-             '{{loop.index}}, {{loc['lat']}}', '{{loc['lng']}}')">{{loc['zipcode']}}</a></li>
+             '{{loop.index}}, {{loc['lat']}}', '{{loc['lng']}}')">{{loc['name']}}</a></li>
       {% endfor %}
     </ul>
   </ul>

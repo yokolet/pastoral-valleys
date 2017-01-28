@@ -59,11 +59,56 @@ DESC = {
     'sex': ['/image/angry.png', 'Sex offense, Rape'],
     }
 
+# Raleigh Open Data doesn't include location around zipcode 27614 pin
 ZIPCODES = [
-    27601, 27603, 27604, 27605, 27606, 27607, 27608, 27609,
-    27610, 27612, 27613, 27614, 27615, 27616, 27617
+    27601, 27603, 27604, 27605, 27606, 27607, 27608,
+    27609, 27610, 27612, 27613, 27615, 27616, 27617
     ]
 
+AREAS = [
+    {'name': 'Boylan Heights',
+     'lat': 35.773880,
+     'lng': -78.652844},
+    {'name': 'Brier Creek',
+     'lat': 35.912697,
+     'lng': -78.781792},
+    {'name': 'Cameron Park',
+     'lat': 35.786081,
+     'lng': -78.655259},
+    {'name': 'Cameron Village',
+     'lat': 35.792093,
+     'lng': -78.661181},
+    {'name': 'Capital District',
+     'lat': 35.781249,
+     'lng': -78.640032},
+    {'name': 'Fairmont',
+     'lat': 35.790328,
+     'lng': -78.670397},
+    {'name': 'Fayetteville Street',
+     'lat': 35.772954,
+     'lng': -78.639502},
+    {'name': 'Five Points',
+     'lat': 35.805704,
+     'lng': -78.641117},
+    {'name': 'Lassiter Mill',
+     'lat': 35.829012,
+     'lng': -78.648467},
+    {'name': 'Mordecai',
+     'lat': 35.795710,
+     'lng': -78.635541},
+    {'name': 'North Hills',
+     'lat': 35.834982,
+     'lng': -78.638971},
+    {'name': 'Northeast Raleigh',
+     'lat': 35.863358,
+     'lng': -78.571559},
+    {'name': 'Umstead',
+     'lat': 35.890672,
+     'lng': -78.750061},
+    {'name': 'Wade',
+     'lat': 35.809230,
+     'lng': -78.734234}
+    ]
 
 GEO_ENDPOINT = APP_CONFIG['geo']['url'] + 'key=' + APP_CONFIG['geo']['api-key']
 
@@ -131,16 +176,18 @@ def getJSON():
         lat, lng, APP_CONFIG['opendata']['radius'])
     print(where_query)
     url += where_query
+    print(url)
     response = rq.get(url)
+    print("status_code: " + str(response.status_code))
     if response.status_code == 200:
         j_data = response.json()
         smaller_data = extract(j_data)
         return json.dumps(smaller_data)
 
 
-@app.route('/api/zipcode/JSON')
-def getZipCoord():
-    return json.dumps(LOCATIONS)
+@app.route('/api/location/JSON')
+def getAreaCoord():
+    return json.dumps(AREAS)
 
 
 @app.route('/')
@@ -163,7 +210,10 @@ def headSample():
 def anotherMap():
     url = APP_CONFIG['map']['url']
     url = url + 'key='+ APP_CONFIG['map']['api-key']
-    return render_template('another-map.html', url=url, locations=LOCATIONS)
+    buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'All'}]
+    for cat in sorted(DESC):
+        buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
+    return render_template('another-map.html', url=url, buttons=buttons, locations=AREAS)
 
 
 @app.errorhandler(500)
