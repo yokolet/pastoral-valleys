@@ -193,27 +193,12 @@ def getAreaCoord():
 @app.route('/')
 def koMarkedMap():
     """The neighborhood map application."""
-    callback = 'initMap'
     url = APP_CONFIG['map']['url']
     url = url + 'key='+ APP_CONFIG['map']['api-key']
     buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'All'}]
     for cat in sorted(DESC):
         buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
-    return render_template('ko-map.html', url=url, buttons=buttons, areas=AREAS)
-
-
-@app.route('/heatmap-sample')
-def headSample():
-    return render_template('heatmap-sample.html')
-
-@app.route('/another-map')
-def anotherMap():
-    url = APP_CONFIG['map']['url']
-    url = url + 'key='+ APP_CONFIG['map']['api-key']
-    buttons = [{'category': 'all', 'image': '/image/check_all.png', 'desc': 'All'}]
-    for cat in sorted(DESC):
-        buttons.append({'category': cat, 'image': DESC[cat][0], 'desc': DESC[cat][1]})
-    return render_template('another-map.html', url=url, buttons=buttons, locations=AREAS)
+    return render_template('ko-map.html', url=url, buttons=buttons, locations=AREAS)
 
 
 @app.errorhandler(500)
