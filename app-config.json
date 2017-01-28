@@ -10,7 +10,7 @@
     "opendata": {
         "url": "https://data.raleighnc.gov/resource/emea-ai2t.json?",
         "app_token": "8wYTL4S7Q97GgZtuUBIe5SEnC",
-        "radius": 500,
+        "radius": 1000,
         "limit": 5000
     }
 }
