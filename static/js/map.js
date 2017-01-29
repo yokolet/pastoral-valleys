@@ -115,6 +115,16 @@ var areanameData = function(mapObj) {
         });
 };
 
+var isVisible = function(mapObj, entry) {
+    if ("all" == mapObj.category()) {
+        return true;
+    } else if (mapObj.category() == entry.category) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 var updateData = function(mapObj, marker) {
     // clear all markers in the old place
     while(mapObj.crimeMarkers().length > 0) {
@@ -134,6 +144,7 @@ var updateData = function(mapObj, marker) {
                     map: mapObj.googleMap,
                     position: new google.maps.LatLng(entry.position.lat,
                                                      entry.position.lng),
+                    visible: isVisible(mapObj, entry),
                     category: entry.category,
                     title: entry.title,
                     icon: entry.icon,
@@ -178,7 +189,7 @@ var mapModel = function() {
         previousMarker: ko.observable(),
         currentMarker: ko.observable(),
         crimeMarkers: ko.observableArray([]),
-        category: ko.observable("al"),
+        category: ko.observable("all"),
     });
 
     this.setCurrent = function(index, lat, lng) {
