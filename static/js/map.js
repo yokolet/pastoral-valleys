@@ -86,6 +86,17 @@ ko.bindingHandlers.anothermap = {
     }
 };
 
+var error_message = function(text) {
+    var message = '';
+    message += '<div class="callout alert" data-closable>\n';
+    message += text + '\n';
+    message += '  <button class="close-button callout-alert-button" aria-label="Dismiss alert" type="button" data-close>\n';
+    message += '    <span aria-hidden="true">&times;</span>\n';
+    message += '  </button>\n'
+    message += '</div>';
+    return $(message)
+}
+
 var areanameData = function(mapObj) {
     url = "/api/location/JSON?";
     $.getJSON(url, function(data) {
@@ -97,7 +108,11 @@ var areanameData = function(mapObj) {
         console.log(mapObj.current().lat);
         console.log(mapObj.current().lng);
         mapObj.locationLoaded(true);
-    });
+    })
+        .fail(function(jqxhr, textStatus, error) {
+            var $message = error_message("Failed to get area info from server");
+            $("#error-area").prepend($message);
+        });
 };
 
 var updateData = function(mapObj, marker) {
@@ -142,7 +157,11 @@ var updateData = function(mapObj, marker) {
         });
         mapObj.googleMap.setCenter(marker.position);
         mapObj.googleMap.setZoom(16);
-    });
+    })
+        .fail(function(jqxhr, textStatus, error) {
+            var $message = error_message("Failed to get crime data from server");
+            $("#error-area").prepend($message);
+        });
 };
 
 

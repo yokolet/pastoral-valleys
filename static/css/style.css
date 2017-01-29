@@ -77,8 +77,21 @@ body {
     font-size: 20px;
     font-family: 'Raleway', sans-serif;
 }
+
 .info-modal {
     font-size: 12px;
+}
+
+.callout-alert-button {
+    top: 0px;
+}
+
+.callout.alert {
+    color: #6a5750;
+    background-color: #ffcaca;
+    font-weight: 700;
+    margin: 0px;
+    padding: 0.1rem 3.0rem 0.1rem 0.2rem;
 }
 
 .row {

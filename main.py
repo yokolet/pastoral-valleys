@@ -128,7 +128,7 @@ def queryZipcode(zipcode):
     return area
 
 
-LOCATIONS = [queryZipcode(zipcode) for zipcode in ZIPCODES]
+#LOCATIONS = [queryZipcode(zipcode) for zipcode in ZIPCODES]
 
 
 def category(words):
@@ -183,6 +183,8 @@ def getJSON():
         j_data = response.json()
         smaller_data = extract(j_data)
         return json.dumps(smaller_data)
+    else:
+        return response.raise_for_status()
 
 
 @app.route('/api/location/JSON')
