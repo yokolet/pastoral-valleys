@@ -59,6 +59,7 @@ DESC = {
     'sex': ['/image/angry.png', 'Sex offense, Rape'],
     }
 
+
 # Location list
 AREAS = [
     {'name': 'Brier Creek',
@@ -108,6 +109,7 @@ AREAS = [
      'lng': -78.734234}
     ]
 
+
 def category(words):
     """Given words (title), returns its category"""
     for listed in KEEP_LIST:
@@ -140,7 +142,7 @@ def extract(j_data):
 
 @app.route('/api/JSON')
 def getJSON():
-    """API endpoint to JavaScript client.
+    """API endpoint to return crime data.
     This method expects the request, /api/JSON?lat=xxx&lng=xxx ,
     and returns JSON data."""
     lat = request.args.get('lat')
@@ -166,6 +168,7 @@ def getJSON():
 
 @app.route('/api/location/JSON')
 def getAreaCoord():
+    """API endpoint to return location data"""
     return json.dumps(AREAS)
 
 
