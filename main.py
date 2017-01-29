@@ -108,27 +108,6 @@ AREAS = [
      'lng': -78.734234}
     ]
 
-GEO_ENDPOINT = APP_CONFIG['geo']['url'] + 'key=' + APP_CONFIG['geo']['api-key']
-
-
-def queryZipcode(zipcode):
-    area = {'zipcode': zipcode}
-    address = '&address=%s' % zipcode
-    url = GEO_ENDPOINT + address
-    response = rq.get(url)
-    print(url)
-    print(response)
-    if response.status_code == 200:
-      if 'results' in response.json() and len(response.json()) > 0:
-          location = response.json()['results'][0]['geometry']['location']
-          area['lat'] = location['lat']
-          area['lng'] = location['lng']
-    return area
-
-
-#LOCATIONS = [queryZipcode(zipcode) for zipcode in ZIPCODES]
-
-
 def category(words):
     """Given words (title), returns its category"""
     for listed in KEEP_LIST:
