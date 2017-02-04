@@ -18,6 +18,20 @@ body {
     color: #f6f1ed;
 }
 
+
+.area-info-window {
+    width: 200px;
+    height: 80px;
+    font-weight: 500;
+}
+
+.crime-info-window {
+    width: 200px;
+    height: 60px;
+    font-weight: 500;
+    font-size: 1.1em;
+}
+
 .map-dropdown-title {
     font-weight: 700;
     color: #6a5750;
@@ -51,25 +65,96 @@ body {
 }
 
 .mobile-ofc .menu a {
-    height: 45px;
-    line-height: 45px;
+    height: 35px;
+    line-height: 35px;
     color: #f6f1ed;
     font-weight: 700;
     font-size: 0.9em;
-    paddin-top: 0;
-    padding-buttom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.filter-title-bar {
+    height: 60px;
+    background-color: #f6f1ed;
+}
+
+.filter-title-bar .top-bar-right button {
+    margin-top: 0px;
+}
+
+.top-bar ul {
+    background-color: #f6f1ed;
+}
+
+.submenu-title {
+    padding-left: 5px;
+    font-weight: 700;
+    background-color: #6a5750;
+    color: #f6f1ed;
 }
 
 .submenu-item {
     padding-left: 5px;
+    height: 35px;
+}
+
+.safety-level-title {
+    color: #6a5750;
+    font-weight: 700;
+}
+
+.safety-level-item {
+    color: #6a5750;
+    font-weight: 700;
+    font-size: 0.8em;
+    padding-left: 3px;
+    padding-right: 2px;
+}
+
+.menu.vertical li:hover {
+    background-color: #d4ccc7;
+}
+
+.safety-level-all {
+    color: #e4ddd7;
+    text-shadow: 1px 1px 1px #ccc;
+}
+
+.safety-level-good {
+    color: #249e24;
+    text-shadow: 1px 1px 1px #ccc;
+}
+
+.safety-level-neutral {
+    color: #f7c90f;
+    text-shadow: 1px 1px 1px #ccc;
+}
+.safety-level-bad {
+    color: #ea0000;
+    text-shadow: 1px 1px 1px #ccc;
+}
+
+.location-item {
+    line-height: 30px;
+}
+
+.crime-filter-button {
+    background-color: #f6f1ed;
 }
 
 .menu > li > a {
     padding: 0px;
 }
 
-.dropdown-pane {
-    width: 70px;
+.safety-dropdown {
+    padding: 5px;
+    width: 120px;
+}
+
+.crime-dropdown {
+    width: 100px;
+    background-color: #f6f1ed;
 }
 
 .info-modal-title {
@@ -120,15 +205,41 @@ body {
     }
 
     .menu-title,
-    .menu-button-face {
+    .menu-button-face,
+    .submenu-title,
+    .safety-level-title {
         font-size: 0.7em;
     }
 
-    .dropdown-pane {
-        width: 50px;
+    .filter-title-bar {
+        height: 120px;
+    }
+
+    .filter-title-bar .top-bar-right button {
+        margin-top: 40px;
+    }
+
+    .crime-dropdown {
+        width: 60px;
+    }
+
+    .crime-filter-button {
+        margin-top: 10px;
+    }
+
+    .submenu a,
+    .submenu .submenu-title {
+        text-align: right;
+    }
+
+    .submenu-item {
+        padding-right: 5px;
+        height: 25px;
     }
 
     .mobile-ofc .menu a {
-        font-size: 0.5em;
+        font-size: 0.7em;
+        height: 25px;
+        line-height: 25px;
     }
 }
