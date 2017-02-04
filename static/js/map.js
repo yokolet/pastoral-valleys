@@ -65,7 +65,7 @@ ko.bindingHandlers.anothermap = {
                 // When crime markers appears, it zooms to current center
                 marker.addListener("click", function() {
                     marker.setAnimation(google.maps.Animation.BOUNCE);
-                    updateData(mapObj, marker, true);
+                    updateData(mapObj, marker);
                 });
                 // Add listener function when infowindow is closed.
                 marker.info.addListener("closeclick", function() {
@@ -97,7 +97,7 @@ ko.bindingHandlers.anothermap = {
         mapObj.onCurrentActivate = function(data) {
             var marker = mapObj.currentMarker();
             marker.setAnimation(google.maps.Animation.BOUNCE);
-            updateData(mapObj, marker, false);
+            updateData(mapObj, marker);
         }
         // Watches a crimeDataRequested state change
         mapObj.dataRequested.subscribe(mapObj.onCurrentActivate);
@@ -154,7 +154,6 @@ var locationContent = function(loc) {
     content += '<div class="area-info-window">Area Name: <b>';
     content += loc.areaname + "</b><br/>";
     content += "Number of Crimes: " + loc.crimecount + "<br/>";
-    content += "<br/><b>Click</b> pin to load crime data</div>";
     return content;
 }
 
@@ -230,7 +229,7 @@ var isVisible = function(mapObj, entry) {
 };
 
 // Load crime data
-var updateData = function(mapObj, marker, focus) {
+var updateData = function(mapObj, marker) {
     // Clear crime markers in an old location
     clearCrimeMarkers(mapObj);
     var lat = marker.position.lat();
@@ -241,38 +240,37 @@ var updateData = function(mapObj, marker, focus) {
         $.each(data, function(i, entry) {
             if (entry.position) {
                 // Create each marker
-                var marker = new google.maps.Marker({
+                var crimeMarker = new google.maps.Marker({
                     map: mapObj.googleMap,
                     position: new google.maps.LatLng(entry.position.lat,
                                                      entry.position.lng),
                     visible: isVisible(mapObj, entry),
                     category: entry.category,
                     title: entry.title,
-                    icon: entry.icon,
+                    icon: entry.icon
                 });
                 // Create an infowindow of this marker
                 var infoObj = new google.maps.InfoWindow({
-                    content: '<div class="crime-info-window">' + entry.content + '</div>'
+                    content: '<div class="crime-info-window">' + entry.content + "</div>"
                 });
+
                 // Add lister function when infowindow is opened.
-                marker.addListener("click", function() {
-                    infoObj.open(mapObj.googleMap, marker);
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                crimeMarker.addListener("click", function() {
+                    infoObj.open(mapObj.googleMap, crimeMarker);
+                    crimeMarker.setAnimation(google.maps.Animation.BOUNCE);
                 });
                 // Add listener function when infowindow is closed.
                 infoObj.addListener("closeclick", function() {
-                    marker.setAnimation(null);
+                    crimeMarker.setAnimation(null);
                 });
                 // Save a marker
-                mapObj.crimeMarkers().push(marker);
+                mapObj.crimeMarkers().push(crimeMarker);
             }
         });
-        $("#crime-filter-button").removeAttr("disabled");
-        if (focus) {
-            mapObj.googleMap.setCenter(marker.position);
-            mapObj.googleMap.setZoom(16);
-        }
         marker.setAnimation(null);
+        mapObj.googleMap.setCenter(marker.position);
+        mapObj.googleMap.setZoom(16);
+        $("#crime-filter-button").removeAttr("disabled");
     })
         .fail(function(jqxhr, textStatus, error) {
             var $message = error_message("Failed to get crime data from server");
