@@ -24,7 +24,6 @@ ko.bindingHandlers.anothermap = {
         mapObj.initialLoc(new Location({"areaname": areaname, "lat": lat, "lng": lng}));
         // Load all area name data
         areanameData(mapObj);
-        $("#" + element.getAttribute("id")).data("mapObj",mapObj);
     },
     update: function (element, valueAccessor, allBindings, viewModel) {
         var value = valueAccessor();
@@ -120,17 +119,6 @@ ko.bindingHandlers.anothermap = {
     }
 };
 
-// Create DOM elements to show error message
-var error_message = function(text) {
-    var message = '';
-    message += '<div class="callout alert" data-closable>\n';
-    message += text + '\n';
-    message += '  <button class="close-button callout-alert-button" aria-label="Dismiss alert" type="button" data-close>\n';
-    message += '    <span aria-hidden="true">&times;</span>\n';
-    message += '  </button>\n'
-    message += '</div>';
-    return $(message)
-}
 
 // Load location data
 var areanameData = function(mapObj) {
@@ -143,8 +131,8 @@ var areanameData = function(mapObj) {
         mapObj.locationLoaded(true);
     })
         .fail(function(jqxhr, textStatus, error) {
-            var $message = error_message("Failed to get area info from server");
-            $("#error-area").prepend($message);
+            mapObj.errorMessage("Failed to get area info from server");
+            mapObj.showErrorMessage(true);
         });
 };
 
@@ -172,10 +160,8 @@ var filterCrimeMarkers = function(mapObj) {
     if ("clear" == filter) {
         clearCrimeMarkers(mapObj);
         mapObj.category("all");
-        if ($("#crime-dropdown").hasClass("is-open")) {
-            $("#crime-dropdown").removeClass("is-open");
-        }
-        $("#crime-filter-button").attr("disabled", '')
+        mapObj.showCrimeFilter(false);
+        mapObj.crimeFilterButton(false);
     } else {
         var markers = mapObj.crimeMarkers();
         for(var i=0; i<markers.length; i++) {
@@ -191,23 +177,9 @@ var filterCrimeMarkers = function(mapObj) {
 
 // Filter location markers
 var filterLocations = function(mapObj) {
-    var locations = mapObj.locations();
     var markers = mapObj.locMarkers();
     var level = mapObj.safetyLevel()
-    for(var i=0; i<locations.length; i++) {
-        var loc = locations[i];
-        var itemId = "#" + loc.id;
-        if (0 == level || loc.safetylevel == level) {
-            if ($(itemId).hasClass("hide")) {
-                $(itemId).removeClass("hide");
-            }
-            $(itemId).addClass("show");
-        } else {
-            if ($(itemId).hasClass("show")) {
-                $(itemId).removeClass("show");
-            }
-            $(itemId).addClass("hide");
-        }
+    for(var i=0; i<markers.length; i++) {
         var marker = markers[i];
         if (0 == level || marker.safetylevel == level) {
             marker.setVisible(true);
@@ -270,11 +242,11 @@ var updateData = function(mapObj, marker) {
         marker.setAnimation(null);
         mapObj.googleMap.setCenter(marker.position);
         mapObj.googleMap.setZoom(16);
-        $("#crime-filter-button").removeAttr("disabled");
+        mapObj.crimeFilterButton(true);
     })
         .fail(function(jqxhr, textStatus, error) {
-            var $message = error_message("Failed to get crime data from server");
-            $("#error-area").prepend($message);
+            mapObj.errorMessage("Failed to get crime data from server");
+            mapObj.showErrorMessage(true);
         });
 };
 
@@ -295,6 +267,8 @@ var mapModel = function() {
         locMarkers: ko.observableArray([]),
         // safety level of locations, 1-3
         safetyLevel: ko.observable(0),
+        // flag to show/hide safety level menu
+        showSafetyLevel: ko.observable(true),
         // previous location marker
         previousMarker: ko.observable(),
         // current location marker
@@ -303,8 +277,16 @@ var mapModel = function() {
         crimeMarkers: ko.observableArray([]),
         // flag to signal marker data loading request
         dataRequested: ko.observable(false),
+        // flag to signal Crime Filter button to toggle show/hide
+        crimeFilterButton: ko.observable(false),
+        // flag to show/hide safety level menu
+        showCrimeFilter: ko.observable(true),
         // current category (filter)
         category: ko.observable("all"),
+        // error message
+        errorMessage: ko.observable(""),
+        // show/hide error message HTML block
+        showErrorMessage: ko.observable(false)
     });
 
     // Change the current location
@@ -323,14 +305,64 @@ var mapModel = function() {
         }
     };
 
+    this.shouldShowLocation = function(index) {
+        var current = self.mapState().safetyLevel();
+        if (0 == current) {
+            return true;
+        } else {
+            var safety = self.mapState().locMarkers()[parseInt(index)-1].safetylevel;
+            return current == safety;
+        }
+    };
+
+    // Toggle the current state of showSafetyLevel
+    this.toggleShowSafetyLevel = function() {
+        var current = self.mapState().showSafetyLevel();
+        self.mapState().showSafetyLevel(!current);
+    };
+
+    this.shouldShowSafetyLevel = function() {
+        return self.mapState().showSafetyLevel();
+    };
+
     // Change the current safety level
     this.setSafetyLevel = function(data) {
         self.mapState().safetyLevel(data);
-    }
+    };
 
     // Change the current category (filter)
     this.setCategory = function(data) {
         self.mapState().category(data);
+    };
+
+    // Toggle show/hide crime filters
+    this.toggleShowCrimeFilter = function() {
+        var current = self.mapState().showCrimeFilter();
+        self.mapState().showCrimeFilter(!current);
+    }
+
+    this.shouldShowCrimeFilter = function() {
+        return self.mapState().showCrimeFilter();
+    }
+
+    // Return the state of Crime Filter button
+    this.getCrimeFilterButton = function() {
+        return self.mapState().crimeFilterButton();
+    };
+
+    // Return error message
+    this.getErrorMessage = function() {
+        return self.mapState().errorMessage();
+    };
+
+    // Return showErrorMessage state
+    this.shouldShowErrorMessage = function() {
+        return self.mapState().showErrorMessage();
+    };
+
+    // Change showErrorMessage state to false
+    this.dismissErrorMessage = function() {
+        self.mapState().showErrorMessage(false);
     };
 
 }

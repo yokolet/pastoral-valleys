@@ -21,7 +21,7 @@ body {
 
 .area-info-window {
     width: 200px;
-    height: 80px;
+    height: 50px;
     font-weight: 500;
 }
 
@@ -75,7 +75,6 @@ body {
 }
 
 .filter-title-bar {
-    height: 60px;
     background-color: #f6f1ed;
 }
 
@@ -97,6 +96,7 @@ body {
 .submenu-item {
     padding-left: 5px;
     height: 35px;
+    border-bottom: 1px solid #f6f1ed;
 }
 
 .safety-level-title {
@@ -108,11 +108,11 @@ body {
     color: #6a5750;
     font-weight: 700;
     font-size: 0.8em;
-    padding-left: 3px;
-    padding-right: 2px;
+    padding-bottom: 10px;
+    width: 35px;
 }
 
-.menu.vertical li:hover {
+.safety-dropdown div:hover {
     background-color: #d4ccc7;
 }
 
@@ -148,12 +148,12 @@ body {
 }
 
 .safety-dropdown {
-    padding: 5px;
-    width: 120px;
+    padding-top: 10px;
+    margin-left: 15px;
 }
 
 .crime-dropdown {
-    width: 100px;
+    padding-left: 20px;
     background-color: #f6f1ed;
 }
 
@@ -177,6 +177,20 @@ body {
     font-weight: 700;
     margin: 0px;
     padding: 0.1rem 3.0rem 0.1rem 0.2rem;
+}
+
+.social-icons {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.social-icons a {
+    padding-right: 10px;
+}
+
+.copyright,
+.attribution {
+    font-weight: 700;
 }
 
 .row {
@@ -212,24 +226,40 @@ body {
     }
 
     .filter-title-bar {
-        height: 120px;
+
     }
 
     .filter-title-bar .top-bar-right button {
-        margin-top: 40px;
+        margin-top: 5px;
+    }
+
+    .safety-dropdown {
+        display: flex;
+        padding: 5px 3px 0px;
+    }
+
+    .safety-level-item {
+        margin: auto;
     }
 
     .crime-dropdown {
-        width: 60px;
+        padding: 5px 2px 0px;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
     }
 
     .crime-filter-button {
-        margin-top: 10px;
+        margin: auto;
     }
 
     .submenu a,
     .submenu .submenu-title {
         text-align: right;
+    }
+
+    .submenu-title {
+        padding-right: 5px;
     }
 
     .submenu-item {
@@ -242,4 +272,10 @@ body {
         height: 25px;
         line-height: 25px;
     }
+
+    .copyright,
+    .attribution {
+        font-size: 0.7em;
+    }
+
 }

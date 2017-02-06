@@ -17,61 +17,60 @@
           <li>
             <div class="top-bar filter-title-bar">
               <div class="top-bar-left">
-                <button class="button small" type="button"
-                        data-toggle="safety-dropdown">
+                <button data-bind="click: toggleShowSafetyLevel()"
+                        class="button small" type="button">
                   <span class="menu-button-face">Safety Filter</span>
                 </button>
-                <div class="dropdown-pane safety-dropdown" id="safety-dropdown" data-dropdown>
-                  <ul class="menu">
-                    {% for safety in safety_levels %}
-                    <li class="safety-level-item"
-                        data-bind="event: {
-                                   mouseover: setSafetyLevel.bind($data, '{{safety['level']}}')}">
-                      <i class="fa fa-square fa-2x {{safety['style']}} has-tip"
-                         data-tooltip
-                         aria-hidden="true"
-                         aria-haspopup="true" data-disable="false"
-                         title="{{safety['title']}}"></i>
-                    </li>
-                    {% endfor %}
-                  </ul>
+                <div data-bind="visible: shouldShowSafetyLevel()"
+                     class="safety-dropdown">
+                  {% for safety in safety_levels %}
+                  <div class="safety-level-item"
+                       data-bind="event: {
+                                  mouseover: setSafetyLevel.bind($data, '{{safety['level']}}')}">
+                    <i class="fa fa-square fa-2x {{safety['style']}} has-tip"
+                       data-tooltip
+                       aria-hidden="true"
+                       aria-haspopup="true" data-disable="false"
+                       title="{{safety['title']}}"></i>
+                  </div>
+                  {% endfor %}
                 </div>
               </div>
               <div class="top-bar-right">
-                <button id="crime-filter-button" class="button float-right small" type="button"
-                        data-toggle="crime-dropdown" disabled>
+                <button data-bind="enable: getCrimeFilterButton(),
+                                   click: toggleShowCrimeFilter()"
+                        class="button float-right small"
+                        type="button">
                   <span class="menu-button-face">Crime Filter</span>
                 </button>
-                <div class="dropdown-pane crime-dropdown" id="crime-dropdown"
-                     data-dropdown>
-                  <ul class="vertical dropdown menu">
-                    {% for button in buttons %}
-                    <li class="crime-filter-button">
-                      <a href="#"
-                         data-bind="click: setCategory.bind($data, '{{button['category']}}')">
-                        <span data-tooltip aria-haspopup="true" class="has-tip"
-                              title="{{button['desc']}}">
-                          <img src="{{button['image']}}"/>
-                        </span>
-                      </a>
-                    </li>
-                    {% endfor %}
-                  </ul>
+                <div data-bind="visible: shouldShowCrimeFilter()"
+                     class="crime-dropdown">
+                  {% for button in buttons %}
+                  <div class="crime-filter-button">
+                    <a href="#"
+                       data-bind="click: setCategory.bind($data, '{{button['category']}}')">
+                      <span data-tooltip aria-haspopup="true" class="has-tip"
+                            title="{{button['desc']}}">
+                        <img src="{{button['image']}}"/>
+                      </span>
+                    </a>
+                  </div>
+                  {% endfor %}
                 </div>
               </div>
             </div>
           </li>
-          <ul class="submenu menu vertical" data-submenu>
+          <ul class="submenu menu vertical">
             <li class="submenu-title">Area List</li>
             {% for loc in locations %}
-            <li class="submenu-item"
-                id="{{loc['id']}}"
-                data-bind="event: { mouseover:
-                           setCurrent.bind($data,'{{loop.index}}','{{loc['lat']}}','{{loc['lng']}}')}">
+            <li data-bind="visible: shouldShowLocation({{loop.index}})"
+                class="submenu-item" id="{{loc['id']}}">
               <a class="location-item" href="#"
                  data-bind="click:
                             activateCurrent.bind($data,'{{loop.index}}',
-                            '{{loc['lat']}}','{{loc['lng']}}')">
+                            '{{loc['lat']}}','{{loc['lng']}}'),
+                            event: { mouseover:
+                            setCurrent.bind($data,'{{loop.index}}','{{loc['lat']}}','{{loc['lng']}}')}">
                 {{loc['name']}}
               </a>
             </li>
@@ -88,12 +87,22 @@
             </button>
           </div>
           <div class="medium-6 large-6 columns">
-            <div class="float-right" id="error-area"></div>
+            <div class="float-right"
+                 data-bind="visible: shouldShowErrorMessage()">
+              <div class="callout alert">
+                <span data-bind="text: getErrorMessage()"></span>
+                <button class="close-button callout-alert-button"
+                        data-bind="click: dismissErrorMessage()"
+                        aria-label="Dismiss alert" type="button">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="small-12 columns">
+      <div class="row expanded">
+        <div class="small-12 large-12 columns">
           <div id="map" data-bind="anothermap: {mapState: mapState,
                                    centerLat: 35.845170,
                                    centerLng: -78.673948,
