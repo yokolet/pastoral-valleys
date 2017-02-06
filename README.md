@@ -4,9 +4,9 @@
 
 When I find my apartment to live next, I consider many factors: a rent, layout, facility,
 walkscore and safety. Among them, the safety is very important. I often visit local news
-media website and check incidents. Luckily, my city, Raleigh, NC is a safe place, so I
-don't see many crime reports on the news site. However, I hear small incidents once
-in a while. So, I decided to explore past crime reports published by City of Raleigh.
+media websites and check incidents. Luckily, my city, Raleigh, NC is a safe place, so I
+don't see many crime reports on the news sites. However, I hear small incidents once
+in a while in my neighborhood. So, I decided to explore past crime reports published by City of Raleigh.
 The data is from
 [City of Raleigh, Public Safefy](https://data.raleighnc.gov/category/public-safety).
 
@@ -17,7 +17,7 @@ don't bother individuals unless they become a victim. Suppose something was stol
 while parking. That would hurt me seriously, but a very small incident to majority.
 Apparently, the incident won't deserve to be a news even on the local media.
 
-The data includes the report since 2005. The data shows, during 10 years, almost
+The data includes the report since 2005. As the data shows, during 10 years, almost
 everywhere had some sort of crimes. The difference is some areas have more,
 while others have less. It is a good information to choose the area for an apartment
 hunting.
@@ -32,9 +32,10 @@ Alternatively, the shortened url [`goo.gl/gFy5tQ`](https://goo.gl/gFy5tQ) works 
 ## About Data
 
 The data fields are explained in the document, [Police Crime Incident Data from Jan 1 2005 - Present - Master (Summary UCR)](https://dev.socrata.com/foundry/data.raleighnc.gov/emea-ai2t).
-The data include records from 2005-present. Probably, the system versions have changed over
-this time range. Many inconsistent records are in the data set.
-For example, the `lcr` (Local crime reporting code) field has more than 400 types.
+The data include long range of records, more than 10 years. Probably, the system versions have changed over
+this time. Many inconsistent records are shown in the data set.
+For example, the `lcr` (Local crime reporting code) field is letters only,
+or mixture of number and letters. In total, there are more than 400 types.
 If I look at `lcr` values assigned to *assault* using a simple Python code, those are:
 
 ```
@@ -76,8 +77,7 @@ JavaScript client.
 ## System design
 
 This app consists of server side and client side apps.
-The server uses [Flask](http://flask.pocoo.org/) framework and
-runs on [Google App Engine](https://cloud.google.com/appengine/).
+The server uses [Flask](http://flask.pocoo.org/) framework.
 The client uses [Knockout](http://knockoutjs.com/index.html) as a MVVM framework.
 
 
@@ -89,6 +89,14 @@ The Knockout app renders Google map and markers based on the data back from Flas
 
 
 # How to run locally
+
+## Python version
+
+This app runs on Python version 2. Check the version by the command:
+
+```
+python -V
+```
 
 ## Google App Engine SDK
 
@@ -108,7 +116,6 @@ pip install --target lib Flask==0.12
 pip install --target lib requests==2.3.0
 ```
 
-
 ## Start server
 
 On the shell, on which path to Google App Engine SDK is set,
@@ -124,6 +131,7 @@ INFO     2017-01-23 18:37:48,956 admin_server.py:116] Starting admin server at: 
 As the message shows, the server is running on port 8080.
 
 
+
 ## Open the client app
 
 On the web browser, open the url:
@@ -136,33 +144,48 @@ http://localhost:8080
 # How to use
 
 
-The app has four features:
+The app has features described below:
 
-1. choose an area
-2. show crimes
-3. filter crimes by category
-4. show details of each crime
+1. show information
 
-## Choosing an area
+    When the info icon on upper right corner, ![info](static/image/Info.png),
+    Data source link and instruction will show up.
 
-A list of areas shows up when hamburger icon on the top left gets clicked.
-Click this icon and see what pin points what area.
+2. choose an area
 
+    A list of areas shows up when hamburger icon on the top left gets clicked.
+    Move the mouse cursor on the area name. Markers on the map open up an info
+    window.
 
-## Showing crimes in the area
+    Alternatively, moving the mouse cursor to the markers on the map also
+    opens the info window.
 
-Click the pin, which triggers to making a request to City of Raleigh Open Data API.
+3. filter areas
 
+    A Safety Filter button shows up when hamburger icon on the top left gets clicked.
+    Each area has a safety level based on the number of crimes in the area.
+    - white: all
+    - green: better
+    - yellow: average
+    - red: worse
 
-## Filtering the crimes
+4. show crimes
 
-The filter dropdown menu (in the left side pane) has choices to show only one category.
-When one of them is clicked, the map shows markers of a chosen category.
+    When the markers on the map are clicked, the app makes query to the server
+    and renders crime markers on the map.
+    On the backend, the Flask server makes a query to City of Raleigh Open Data API.
 
+5. filter crimes by category
 
-## Showing details
+    Once crime data is loaded and crime markers are put on the map, Crime Filter
+    button turns to available to click. Choose one of them to filter crime
+    category.
+    Also, clearing all crime icons up from map is available.
 
-Each crime marker is clickable. When the marker is clicked, it shows the details of the crime.
+6. show details of each crime
+
+    Each crime marker is clickable. When the marker is clicked,
+    it shows the details of the crime.
 
 
 # Files
@@ -171,13 +194,17 @@ Each crime marker is clickable. When the marker is clicked, it shows the details
 - `app.yaml`: Google App Engine web app config file
 - `appengine-config.py`: Google App Engine library loading config file
 - `app-config.json`: API keys and OpenData search options
-- `main.py`: Flask app
+- `area-data.json`: Manually (offline) created area (location) data
+- `areadata_builder.py`: Offline app to create area-data.json
+- `crimedata-builder.py`: Function to create crime data for JavaScript client/
+- `flask_main.py`: Flask app
+- `utils.py`: Utilities to connect Open Data API
 - `requirements.txt`: Python packages installation info
-- `lib`: Python packages directory (will be created by pip install)
 - `static/css`: a directory for CSS files
 - `static/image`: a directory for image files
 - `static/js`: a directory for JavaScript files
 - `templates`: a directory for Jinja2 template files
+
 
 
 ### Credit to icons
@@ -196,5 +223,7 @@ Each crime marker is clickable. When the marker is clicked, it shows the details
     <https://icons8.com/web-app/13034/thriller>
 - Check All
     <https://icons8.com/web-app/24522/check-all>
+- Uncheck All
+    <https://icons8.com/web-app/35041/uncheck-all>
 - Info
     <https://icons8.com/web-app/12253/info>
