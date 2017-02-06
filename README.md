@@ -197,7 +197,7 @@ The app has features described below:
 - `area-data.json`: Manually (offline) created area (location) data
 - `areadata_builder.py`: Offline app to create area-data.json
 - `crimedata-builder.py`: Function to create crime data for JavaScript client/
-- `flask_main.py`: Flask app
+- `main.py`: Flask app
 - `utils.py`: Utilities to connect Open Data API
 - `requirements.txt`: Python packages installation info
 - `static/css`: a directory for CSS files
