@@ -74,6 +74,10 @@ body {
     padding-bottom: 0;
 }
 
+.mobile-ofc .menu a:hover {
+    background-color: #6a5750;
+}
+
 .filter-title-bar {
     background-color: #f6f1ed;
 }
@@ -150,11 +154,13 @@ body {
 .safety-dropdown {
     padding-top: 10px;
     margin-left: 15px;
+    margin-top: 30px;
 }
 
 .crime-dropdown {
     padding-left: 20px;
     background-color: #f6f1ed;
+    margin-top: 40px;
 }
 
 .info-modal-title {
@@ -215,14 +221,14 @@ body {
     }
 
     .position-left {
-        width: 150px;
+        width: 160px;
     }
 
     .menu-title,
     .menu-button-face,
     .submenu-title,
     .safety-level-title {
-        font-size: 0.7em;
+        font-size: 1.0em;
     }
 
     .filter-title-bar {
@@ -264,13 +270,13 @@ body {
 
     .submenu-item {
         padding-right: 5px;
-        height: 25px;
+        height: 30px;
     }
 
     .mobile-ofc .menu a {
-        font-size: 0.7em;
-        height: 25px;
-        line-height: 25px;
+        font-size: 0.9em;
+        height: 30px;
+        line-height: 30px;
     }
 
     .copyright,

@@ -3,16 +3,17 @@
 * @param {Object} data - location data
 */
 var Location = function(data) {
-    this.id = data["id"];
-    this.areaname = data["name"];
-    this.safetylevel = data["safelevel"];
-    this.crimecount = data["count"];
-    this.lat = data["lat"];
-    this.lng = data["lng"];
-}
+    this.id = data.id;
+    this.areaname = data.name;
+    this.safetylevel = data.safelevel;
+    this.crimecount = data.count;
+    this.lat = data.lat;
+    this.lng = data.lng;
+};
 
 // Knockout JS custom handler definition
 ko.bindingHandlers.anothermap = {
+    // init function of this custom binding
     init: function (element, valueAccessor, allBindings, viewModel) {
         // values come from html data-binding
         var value = valueAccessor();
@@ -25,6 +26,7 @@ ko.bindingHandlers.anothermap = {
         // Load all area name data
         areanameData(mapObj);
     },
+    // update function of this custom binding
     update: function (element, valueAccessor, allBindings, viewModel) {
         var value = valueAccessor();
         var mapObj = ko.unwrap(value.mapState);
@@ -73,7 +75,7 @@ ko.bindingHandlers.anothermap = {
                 // Save a marker
                 mapObj.locMarkers().push(marker);
             });
-        }
+        };
         // Watches location data loading completion
         mapObj.locationLoaded.subscribe(mapObj.onAreanameLoad);
 
@@ -87,7 +89,7 @@ ko.bindingHandlers.anothermap = {
             var marker = mapObj.currentMarker();
             marker.info.open(mapObj.googleMap, marker);
             marker.setIcon("/static/image/green-marker.png");
-        }
+        };
 
         // Watches a currentMarker state change
         mapObj.currentMarker.subscribe(mapObj.onCurrentChange);
@@ -97,14 +99,14 @@ ko.bindingHandlers.anothermap = {
             var marker = mapObj.currentMarker();
             marker.setAnimation(google.maps.Animation.BOUNCE);
             updateData(mapObj, marker);
-        }
+        };
         // Watches a crimeDataRequested state change
         mapObj.dataRequested.subscribe(mapObj.onCurrentActivate);
 
         // Re-render crime markers looking at a current category state
         mapObj.onChangedCrimeFilter = function(data) {
             filterCrimeMarkers(mapObj);
-        }
+        };
 
         // Watches a category(filter) state change
         mapObj.category.subscribe(mapObj.onChangedCrimeFilter);
@@ -112,7 +114,7 @@ ko.bindingHandlers.anothermap = {
         // Show only requested location names and markers
         mapObj.onChangedSafetyLevel = function(data) {
             filterLocations(mapObj);
-        }
+        };
 
         // Watches a safetyLevel state change
         mapObj.safetyLevel.subscribe(mapObj.onChangedSafetyLevel);
@@ -143,16 +145,16 @@ var locationContent = function(loc) {
     content += loc.areaname + "</b><br/>";
     content += "Number of Crimes: " + loc.crimecount + "<br/>";
     return content;
-}
+};
 
 // Delete all crime markers
 var clearCrimeMarkers = function(mapObj) {
     // Clear all markers currently shown
     while(mapObj.crimeMarkers().length > 0) {
-        m = mapObj.crimeMarkers().shift()
+        var m = mapObj.crimeMarkers().shift();
         m.setMap(null);
     }
-}
+};
 
 // Filter crime markers
 var filterCrimeMarkers = function(mapObj) {
@@ -173,12 +175,12 @@ var filterCrimeMarkers = function(mapObj) {
             }
         }
     }
-}
+};
 
 // Filter location markers
 var filterLocations = function(mapObj) {
     var markers = mapObj.locMarkers();
-    var level = mapObj.safetyLevel()
+    var level = mapObj.safetyLevel();
     for(var i=0; i<markers.length; i++) {
         var marker = markers[i];
         if (0 == level || marker.safetylevel == level) {
@@ -187,7 +189,7 @@ var filterLocations = function(mapObj) {
             marker.setVisible(false);
         }
     }
-}
+};
 
 // Checks whether the crime marker should be visible or not
 var isVisible = function(mapObj, entry) {
@@ -295,6 +297,7 @@ var mapModel = function() {
         self.mapState().currentMarker(self.mapState().locMarkers()[parseInt(index)-1]);
     };
 
+    // Change the current location and load crime data
     this.activateCurrent = function(index, lat, lng) {
         self.setCurrent(index, lat, lng);
         var current = self.mapState().dataRequested();
@@ -305,6 +308,7 @@ var mapModel = function() {
         }
     };
 
+    // Return truthy value whether a location should be visible or not
     this.shouldShowLocation = function(index) {
         var current = self.mapState().safetyLevel();
         if (0 == current) {
@@ -321,6 +325,7 @@ var mapModel = function() {
         self.mapState().showSafetyLevel(!current);
     };
 
+    // Return the current safety level
     this.shouldShowSafetyLevel = function() {
         return self.mapState().showSafetyLevel();
     };
@@ -339,11 +344,12 @@ var mapModel = function() {
     this.toggleShowCrimeFilter = function() {
         var current = self.mapState().showCrimeFilter();
         self.mapState().showCrimeFilter(!current);
-    }
+    };
 
+    // Return the value of showCrimeFilter to show/hide Crime Filter Button
     this.shouldShowCrimeFilter = function() {
         return self.mapState().showCrimeFilter();
-    }
+    };
 
     // Return the state of Crime Filter button
     this.getCrimeFilterButton = function() {
@@ -365,8 +371,14 @@ var mapModel = function() {
         self.mapState().showErrorMessage(false);
     };
 
+};
+
+// Error handling function
+function googleMapError() {
+    alert("Failed to start app. Check Internet connection, URL, etc. Then, reload.");
 }
 
-$(document).ready(function () {
-   ko.applyBindings(new mapModel);
-});
+// Callback function when Google Map is loaded
+var initMap = function() {
+    ko.applyBindings(new mapModel());
+};

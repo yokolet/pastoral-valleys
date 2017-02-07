@@ -48,6 +48,7 @@ def koMarkedMap():
     """The neighborhood map application."""
     url = utils.APP_CONFIG['map']['url']
     url = url + 'key='+ utils.APP_CONFIG['map']['api-key']
+    url += '&callback=initMap'
     buttons = [{'category': 'clear', 'image': '/static/image/uncheck_all.png', 'desc': 'Clear All'},
                {'category': 'all', 'image': '/static/image/check_all.png', 'desc': 'All'}]
     for cat in sorted(crime.DESC):
